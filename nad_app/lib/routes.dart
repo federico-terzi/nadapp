@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:nad_app/screens/intro/intro_screen.dart';
+import 'package:nad_app/screens/login/login_screen.dart';
 import 'package:nad_app/screens/patient_check/patient_check_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -11,6 +12,9 @@ PageTransition<dynamic> routeFactory(RouteSettings settings) {
     case '/patientCheck':
       return PageTransition(child: PatientCheckScreen(), type: PageTransitionType.rightToLeft);
       break;
+    case '/login':
+      return PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft);
+      break;
     default:
       return null;
   }
@@ -18,5 +22,4 @@ PageTransition<dynamic> routeFactory(RouteSettings settings) {
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/intro": (BuildContext context) => IntroScreen(),
   "/patientCheck": (BuildContext context) => IntroScreen(),
-  //"/ExScreen2": (BuildContext context) => ExScreen2(),
 };

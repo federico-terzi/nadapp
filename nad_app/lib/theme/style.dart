@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+const MAIN_COLOR = Color.fromRGBO(9, 132, 227, 1);
+
 ThemeData appTheme() {
   return ThemeData(
-      primaryColor: Colors.white,
-      accentColor: Color.fromRGBO(9, 132, 227, 1),
-      hintColor: Colors.white,
-      dividerColor: Colors.white,
-      buttonColor: Colors.white,
+      primaryColor: MAIN_COLOR,
+      accentColor: MAIN_COLOR,
+      hintColor: Color.fromRGBO(99, 110, 114, 1),
+      dividerColor: MAIN_COLOR,
+      buttonColor: Color.fromRGBO(223, 230, 233, 1),
+      focusColor: MAIN_COLOR,
       scaffoldBackgroundColor: Colors.white,
       canvasColor: Colors.white,
       textTheme: TextTheme(
@@ -18,9 +21,24 @@ ThemeData appTheme() {
             fontSize: 48,
             color: Color.fromRGBO(9, 132, 227, 1),
             fontWeight: FontWeight.bold),
+        button: TextStyle(
+            fontSize: 22,
+            color: Color.fromRGBO(99, 110, 114, 1),
+            fontWeight: FontWeight.normal),
         bodyText1: TextStyle(
             fontSize: 22,
             color: Color.fromRGBO(99, 110, 114, 1),
             fontWeight: FontWeight.normal),
-      ));
+        bodyText2: TextStyle(
+            fontSize: 20,
+            color: Color.fromRGBO(99, 110, 114, 1),
+            fontWeight: FontWeight.normal),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: Color.fromRGBO(99, 110, 114, 1)),
+              borderRadius: BorderRadius.circular(15)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: MAIN_COLOR),
+              borderRadius: BorderRadius.circular(15))));
 }
