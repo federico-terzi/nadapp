@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:nad_app/theme/style.dart';
 
-final Drawer homeDrawer = Drawer(
-  // Add a ListView to the drawer. This ensures the user can scroll
-  // through the options in the drawer if there isn't enough vertical
-  // space to fit everything.
-  child: ListView(
-    // Important: Remove any padding from the ListView.
-    padding: EdgeInsets.zero,
-    children: <Widget>[
-      DrawerHeader(
-        child: Text('Drawer Header'),
-        decoration: BoxDecoration(
-          color: Colors.blue,
+Drawer homeDrawer() {
+  return Drawer(
+    child: ListView(
+      // Important: Remove any padding from the ListView.
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        Container(
+          height: 90,
+          child: DrawerHeader(
+            child: Text("Impostazioni"),
+            decoration: BoxDecoration(
+              color: MAIN_COLOR,
+            ),
+          ),
         ),
-      ),
-      ListTile(
-        title: Text('Item 1'),
-        onTap: () {
-          // Update the state of the app.
-          // ...
-        },
-      ),
-      ListTile(
-        title: Text('Item 2'),
-        onTap: () {
-          // Update the state of the app.
-          // ...
-        },
-      ),
-    ],
-  ),
-);
+        ListTile(
+          title: Text('Item 1'),
+          onTap: () {
+            // Update the state of the app.
+            // ...
+          },
+        ),
+        ListTile(
+          title: Text('Item 2'),
+          onTap: () {
+            // Update the state of the app.
+            // ...
+          },
+        ),
+      ],
+    ),
+  );
+}

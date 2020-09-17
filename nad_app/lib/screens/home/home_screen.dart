@@ -65,28 +65,34 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      color: Colors.white,
-                      size: 45,
-                      semanticLabel: 'Apri menu',
+                  FadeInLeft(
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                        size: 40,
+                        semanticLabel: 'Apri menu',
+                      ),
+                      onPressed: () {
+                        scaffoldKey.currentState.openDrawer();
+                      },
                     ),
-                    onPressed: () {
-                      scaffoldKey.currentState.openDrawer();
-                    },
+                    preferences: AnimationPreferences(offset: Duration(milliseconds: 500)),
                   ),
                   Image.asset("assets/logowhite.png", height: 130),
-                  IconButton(
-                    icon: Icon(
-                      Icons.help,
-                      color: Colors.white,
-                      size: 45,
-                      semanticLabel: 'Aiuto',
+                  FadeInRight(
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.help,
+                        color: Colors.white,
+                        size: 40,
+                        semanticLabel: 'Aiuto',
+                      ),
+                      onPressed: () {
+                        // TODO
+                      },
                     ),
-                    onPressed: () {
-                      // TODO
-                    },
+                    preferences: AnimationPreferences(offset: Duration(milliseconds: 500)),
                   ),
                 ],
               ),
@@ -99,7 +105,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: 30),
               ...generateCards(),
             ],
-            drawer: homeDrawer,
+            drawer: homeDrawer(),
           )
         );
       },
