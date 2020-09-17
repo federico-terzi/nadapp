@@ -15,6 +15,8 @@ class LoginPhaseTwoForm extends StatefulWidget {
 }
 
 class _LoginPhaseTwoFormState extends State<LoginPhaseTwoForm> {
+  final numericRegex = RegExp(r'^[0-9]+$');
+
   final _formKey = GlobalKey<FormState>();
 
   String verificationCode;
@@ -41,6 +43,9 @@ class _LoginPhaseTwoFormState extends State<LoginPhaseTwoForm> {
               if (value.isEmpty) {
                 return 'Per favore, inserisci il codice ricevuto via SMS';
               }
+              if (!numericRegex.hasMatch(value)) {
+                return "Il codice è composto unicamente da numeri, per favore riprova";
+              }
               return null;
             },
             onSaved: (String value) {
@@ -59,12 +64,9 @@ class _LoginPhaseTwoFormState extends State<LoginPhaseTwoForm> {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
 
-                /*
-                StoreProvider.of<AppState>(context).dispatch(LoginRequest(
-                  username: username,
-                  password: password,
+                StoreProvider.of<AppState>(context).dispatch(VerifyRequest(
+                  code: verificationCode
                 ));
-                */
               }
             },
           ),

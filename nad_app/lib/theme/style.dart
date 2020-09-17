@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const MAIN_COLOR = Color.fromRGBO(9, 132, 227, 1);
+const DARKER_COLOR = Color.fromRGBO(0, 48, 85, 1);
 
 ThemeData appTheme() {
   return ThemeData(
@@ -41,4 +42,29 @@ ThemeData appTheme() {
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: MAIN_COLOR),
               borderRadius: BorderRadius.circular(15))));
+}
+
+TextTheme homeTextTheme() {
+  return TextTheme(
+    headline1: TextStyle(
+        fontSize: 32,
+        color: Colors.white,
+        fontWeight: FontWeight.bold),
+    headline2: TextStyle(
+        fontSize: 24,
+        color: Colors.white,
+        fontWeight: FontWeight.normal),
+    button: TextStyle(
+        fontSize: 30,
+        color: MAIN_COLOR,
+        fontWeight: FontWeight.bold),
+    bodyText1: TextStyle(
+        fontSize: 22,
+        color: Colors.white,
+        fontWeight: FontWeight.normal),
+    bodyText2: TextStyle(
+        fontSize: 20,
+        color: Colors.white,
+        fontWeight: FontWeight.normal),
+  );
 }

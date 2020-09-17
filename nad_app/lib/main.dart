@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nad_app/middleware/logger_middleware.dart';
 import 'package:nad_app/middleware/login_middleware.dart';
+import 'package:nad_app/middleware/navigation_middleware.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:nad_app/models/app_state.dart';
@@ -10,11 +11,13 @@ import 'package:flutter/rendering.dart';
 
 import 'routes.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   // TODO: read from preferences if the user is logged in
   final store = Store<AppState>(rootReducer,
       initialState: AppState(),
-      middleware: [loggerMiddleware, loginMiddleware]);
+      middleware: [loggerMiddleware, loginMiddleware, navigationMiddleware]);
 
   runApp(NadApp(store: store));
 }
@@ -30,6 +33,7 @@ class NadApp extends StatelessWidget {
     return new StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'NAD-APP',
         theme: appTheme(),
         initialRoute: "/intro",

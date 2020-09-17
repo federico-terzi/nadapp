@@ -5,6 +5,8 @@ import 'package:redux/redux.dart';
 Reducer<AuthState> authReducer = combineReducers([
   new TypedReducer<AuthState, LoginRequest>(loginRequestReducer),
   new TypedReducer<AuthState, LoginPhaseOneSuccess>(loginPhaseOneSuccessReducer),
+  new TypedReducer<AuthState, VerifyRequest>(verifyRequestReducer),
+  new TypedReducer<AuthState, LoginPhaseTwoSuccess>(loginPhaseTwoSuccessReducer),
 ]);
 
 AuthState loginRequestReducer(AuthState auth, LoginRequest action) {
@@ -19,6 +21,19 @@ AuthState loginPhaseOneSuccessReducer(AuthState auth, LoginPhaseOneSuccess actio
   return auth.copyWith(
       isPhaseOneCompleted: true,
       isLoading: false,
+  );
+}
+
+AuthState verifyRequestReducer(AuthState auth, VerifyRequest action) {
+  return auth.copyWith(
+    isLoading: true,
+  );
+}
+
+AuthState loginPhaseTwoSuccessReducer(AuthState auth, LoginPhaseTwoSuccess action) {
+  return auth.copyWith(
+    isLoading: false,
+    user: action.user,
   );
 }
 

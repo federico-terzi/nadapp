@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:nad_app/presentation/big_button.dart';
-import 'package:nad_app/presentation/fading_column.dart';
+import 'package:nad_app/presentation/fading_scaffold.dart';
+import 'package:nad_app/routes.dart';
 
 class PatientCheckScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FadingColumn(
+    return FadingScaffold(
       children: [
         Flexible(
           flex: 1,
@@ -25,7 +26,7 @@ class PatientCheckScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pushNamed(
               context,
-              "/login",
+              LOGIN_ROUTE,
             );
           },
         ),

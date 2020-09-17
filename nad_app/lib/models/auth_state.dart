@@ -2,12 +2,6 @@ import 'package:meta/meta.dart';
 
 import 'package:nad_app/models/user.dart';
 
-enum AuthPhase {
-  NotLoggedIn,
-  CredentialsVerified,
-  TwoFactorVerified
-}
-
 @immutable
 class AuthState {
   final User user;
@@ -29,7 +23,6 @@ class AuthState {
     this.error,
   });
 
-  // allows to modify AuthState parameters while cloning previous ones
   AuthState copyWith({
     bool isPhaseOneCompleted,
     bool isLoading,

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:nad_app/presentation/big_button.dart';
-import 'package:nad_app/presentation/fading_column.dart';
+import 'package:nad_app/presentation/fading_scaffold.dart';
+import 'package:nad_app/routes.dart';
 
 class IntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FadingColumn(
+    return FadingScaffold(
       children: [
         Flexible(
           flex: 1,
@@ -35,7 +36,7 @@ class IntroScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pushNamed(
               context,
-              "/patientCheck",
+              PATIENT_CHECK_ROUTE,
             );
           },
         ),
