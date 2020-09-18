@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 const MAIN_COLOR = Color.fromRGBO(9, 132, 227, 1);
 const DARKER_COLOR = Color.fromRGBO(0, 48, 85, 1);
+const ALMOST_BLACK_COLOR = Color.fromRGBO(45, 52, 54, 1);
+const LIGHT_GRAY_COLOR = Color.fromRGBO(245, 245, 245, 1);
 
 ThemeData appTheme() {
   return ThemeData(
@@ -21,6 +23,14 @@ ThemeData appTheme() {
         headline2: TextStyle(
             fontSize: 48,
             color: Color.fromRGBO(9, 132, 227, 1),
+            fontWeight: FontWeight.bold),
+        headline3: TextStyle(
+            fontSize: 26,
+            color: Color.fromRGBO(99, 110, 114, 1),
+            fontWeight: FontWeight.bold),
+        headline4: TextStyle(
+            fontSize: 20,
+            color: Color.fromRGBO(99, 110, 114, 1),
             fontWeight: FontWeight.bold),
         button: TextStyle(
             fontSize: 22,

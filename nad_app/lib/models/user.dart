@@ -1,3 +1,6 @@
+import 'package:flutter/widgets.dart';
+
+@immutable
 class User {
   final String username;
   final String name;

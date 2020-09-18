@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:nad_app/screens/diary/diary_screen.dart';
 import 'package:nad_app/screens/home/home_screen.dart';
 import 'package:nad_app/screens/intro/intro_screen.dart';
 import 'package:nad_app/screens/login/login_screen.dart';
@@ -9,6 +10,7 @@ const INTRO_ROUTE = "/intro";
 const PATIENT_CHECK_ROUTE = "/patientCheck";
 const LOGIN_ROUTE = "/login";
 const HOME_ROUTE = "/home";
+const DIARY_ROUTE = "/diary";
 
 PageTransition<dynamic> routeFactory(RouteSettings settings) {
   switch (settings.name) {
@@ -23,6 +25,9 @@ PageTransition<dynamic> routeFactory(RouteSettings settings) {
       break;
     case HOME_ROUTE:
       return PageTransition(child: HomeScreen(), type: PageTransitionType.fade);
+      break;
+    case DIARY_ROUTE:
+      return PageTransition(child: DiaryScreen(), type: PageTransitionType.rightToLeft);
       break;
     default:
       return null;

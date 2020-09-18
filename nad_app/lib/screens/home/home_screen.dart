@@ -5,6 +5,7 @@ import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/auth_state.dart';
 import 'package:nad_app/presentation/big_button.dart';
 import 'package:nad_app/presentation/fading_scaffold.dart';
+import 'package:nad_app/routes.dart';
 import 'package:nad_app/screens/home/home_card.dart';
 import 'package:nad_app/screens/home/home_drawer.dart';
 import 'package:nad_app/screens/login/login_phase_one_form.dart';
@@ -13,12 +14,14 @@ import 'package:nad_app/theme/style.dart';
 class HomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: "Test");
 
-  List<Widget> generateCards() {
+  List<Widget> generateCards(BuildContext context) {
     var cards = [
       HomeCard(
           image: "assets/diario.png",
           label: "Diario alimentare",
-          onPressed: () => {}),
+          onPressed: () => {
+            Navigator.of(context).pushNamed(DIARY_ROUTE)
+          }),
       HomeCard(
           image: "assets/bilancio.png",
           label: "Bilancio idrico",
@@ -103,9 +106,9 @@ class HomeScreen extends StatelessWidget {
               Text("come posso aiutarti?",
                   style: darkTheme.textTheme.headline2),
               SizedBox(height: 30),
-              ...generateCards(),
+              ...generateCards(context),
             ],
-            drawer: homeDrawer(),
+            drawer: homeDrawer(context),
           )
         );
       },

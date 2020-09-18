@@ -2,7 +2,7 @@ import 'package:nad_app/actions/navigation_actions.dart';
 import 'package:nad_app/models/navigation_state.dart';
 import 'package:redux/redux.dart';
 
-Reducer<NavigationState> authReducer = combineReducers([
+Reducer<NavigationState> navigationReducer = combineReducers([
   new TypedReducer<NavigationState, PushNamed>(pushNamedReducer),
 ]);
 
