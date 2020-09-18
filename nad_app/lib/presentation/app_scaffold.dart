@@ -31,7 +31,10 @@ class AppScaffold extends StatelessWidget {
         )),
         backgroundColor: Colors.transparent,
       ),
-      body: body,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+        child: body,
+      ),
       floatingActionButton: fab,
     );
   }

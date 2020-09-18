@@ -4,6 +4,8 @@ const MAIN_COLOR = Color.fromRGBO(9, 132, 227, 1);
 const DARKER_COLOR = Color.fromRGBO(0, 48, 85, 1);
 const ALMOST_BLACK_COLOR = Color.fromRGBO(45, 52, 54, 1);
 const LIGHT_GRAY_COLOR = Color.fromRGBO(245, 245, 245, 1);
+const DARKER_GRAY_COLOR = Color.fromRGBO(178, 190, 195, 1);
+const DARKEST_GRAY_COLOR = Color.fromRGBO(99, 110, 114, 1);
 
 ThemeData appTheme() {
   return ThemeData(

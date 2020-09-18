@@ -10,6 +10,8 @@ void navigationMiddleware(Store<AppState> store, action, NextDispatcher next) {
     } else {
       navigatorKey.currentState.pushNamedAndRemoveUntil(action.route, (_) => false);
     }
+  } else if (action is Pop) {
+    navigatorKey.currentState.pop();
   }
 
   next(action);

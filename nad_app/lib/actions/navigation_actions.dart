@@ -11,3 +11,5 @@ class PushNamed {
     return 'PushNamed{route: $route, reset: $reset}';
   }
 }
+
+class Pop {}

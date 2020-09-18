@@ -6,6 +6,7 @@ import 'package:nad_app/models/meal_state.dart';
 import 'package:nad_app/presentation/app_fab.dart';
 import 'package:nad_app/presentation/app_scaffold.dart';
 import 'package:nad_app/presentation/big_icon_button.dart';
+import 'package:nad_app/routes.dart';
 import 'package:nad_app/utils/date_utils.dart';
 
 class DiaryScreen extends StatelessWidget {
@@ -28,6 +29,10 @@ class DiaryScreen extends StatelessWidget {
           );
         });
   }
+  
+  void gotoAddMealScreen(BuildContext context) {
+    Navigator.of(context).pushNamed(ADD_MEAL_ROUTE);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,27 +41,28 @@ class DiaryScreen extends StatelessWidget {
         builder: (context, mealState) {
           return AppScaffold(
             title: "Diario alimentare",
-            body: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Column(
-                children: [
-                  BigIconButton(
-                      text: "Aggiungi pasto",
-                      onPressed: () {},
-                      icon: Icons.add_circle_outline),
-                  SizedBox(height: 20),
-                  Text(
-                    "Pasti recenti:",
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(child: _getRecentMeals(mealState.meals)),
-                ],
-              ),
+            body: Column(
+              children: [
+                BigIconButton(
+                    text: "Aggiungi pasto",
+                    onPressed: () {
+                      gotoAddMealScreen(context);
+                    },
+                    icon: Icons.add_circle_outline),
+                SizedBox(height: 20),
+                Text(
+                  "Pasti recenti:",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+                SizedBox(height: 10),
+                Expanded(child: _getRecentMeals(mealState.meals)),
+              ],
             ),
             fab: AppFab(
               tooltip: "Aggiungi pasto",
-              onPressed: () => {},
+              onPressed: () {
+                gotoAddMealScreen(context);
+              },
             ),
           );
         });
