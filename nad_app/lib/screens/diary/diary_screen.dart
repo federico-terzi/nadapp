@@ -14,15 +14,16 @@ class DiaryScreen extends StatelessWidget {
     return ListView.builder(
         itemCount: meals.length,
         itemBuilder: (context, index) {
+          int reverseIndex = meals.length - index - 1;
           return Card(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: ListTile(
-                title: Text(getFormattedDate(meals[index].date), style: Theme.of(context).textTheme.headline4),
+                title: Text(getFormattedDate(meals[reverseIndex].date), style: Theme.of(context).textTheme.headline4),
                 subtitle:
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Text(meals[index].meal, style: Theme.of(context).textTheme.bodyText2),
+                  child: Text(meals[reverseIndex].meal, style: Theme.of(context).textTheme.bodyText2),
                 ),
               ),
             ),

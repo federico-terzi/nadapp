@@ -25,7 +25,9 @@ class HomeScreen extends StatelessWidget {
       HomeCard(
           image: "assets/bilancio.png",
           label: "Bilancio idrico",
-          onPressed: () => {}),
+          onPressed: () => {
+            Navigator.of(context).pushNamed(BALANCE_ROUTE)
+          }),
       HomeCard(
           image: "assets/referti.png",
           label: "I miei referti",

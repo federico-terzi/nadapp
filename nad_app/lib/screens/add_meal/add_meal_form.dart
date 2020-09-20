@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:nad_app/actions/auth_actions.dart';
 import 'package:nad_app/actions/meal_actions.dart';
 import 'package:nad_app/models/app_state.dart';
@@ -38,7 +40,16 @@ class _AddMealFormState extends State<AddMealForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          DateButton(onPressed: () {}, date: date),
+          DateButton(onPressed: () {
+            DatePicker.showDateTimePicker(context,
+                showTitleActions: true,
+                minTime: Jiffy().subtract(days: 30),
+                maxTime: DateTime.now(), onConfirm: (date) {
+                  setState(() {
+                    this.date = date;
+                  });
+                }, currentTime: date, locale: LocaleType.it);
+          }, date: date),
           SizedBox(height: 20),
           Text(
             "Descrivi il tuo pasto:",

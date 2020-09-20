@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:nad_app/screens/add_balance/add_balance_screen.dart';
 import 'package:nad_app/screens/add_meal/add_meal_screen.dart';
+import 'package:nad_app/screens/balance/balance_screen.dart';
 import 'package:nad_app/screens/diary/diary_screen.dart';
 import 'package:nad_app/screens/home/home_screen.dart';
 import 'package:nad_app/screens/intro/intro_screen.dart';
@@ -13,6 +15,8 @@ const LOGIN_ROUTE = "/login";
 const HOME_ROUTE = "/home";
 const DIARY_ROUTE = "/diary";
 const ADD_MEAL_ROUTE = "/addMeal";
+const BALANCE_ROUTE = "/balance";
+const ADD_BALANCE_ROUTE = "/addBalance";
 
 PageTransition<dynamic> routeFactory(RouteSettings settings) {
   switch (settings.name) {
@@ -33,6 +37,12 @@ PageTransition<dynamic> routeFactory(RouteSettings settings) {
       break;
     case ADD_MEAL_ROUTE:
       return PageTransition(child: AddMealScreen(), type: PageTransitionType.rightToLeft);
+      break;
+    case BALANCE_ROUTE:
+      return PageTransition(child: BalanceScreen(), type: PageTransitionType.rightToLeft);
+      break;
+    case ADD_BALANCE_ROUTE:
+      return PageTransition(child: AddBalanceScreen(), type: PageTransitionType.rightToLeft);
       break;
     default:
       return null;

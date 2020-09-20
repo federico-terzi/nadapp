@@ -5,16 +5,26 @@ import 'package:nad_app/theme/style.dart';
 class DateButton extends StatelessWidget {
   final VoidCallback onPressed;
   final DateTime date;
+  final bool includeTime;
 
-  DateButton({@required this.onPressed, this.date});
+  DateButton({@required this.onPressed, this.date, this.includeTime = true});
 
-  String renderDate(DateTime date) {
+  String renderDateTime(DateTime date) {
+    // TODO: if date is closer than 5 minutes, show "Adesso"
     var jiffy = Jiffy(date)..startOf(Units.MINUTE);
     return "${jiffy.fromNow()} (${jiffy.format("HH:mm")})";
   }
 
+  String renderDate(DateTime date) {
+    // TODO: if date is today, output "Oggi"
+
+    var jiffy = Jiffy(date)..startOf(Units.DAY);
+    return "${jiffy.fromNow()} (${jiffy.format("dd/MM/yyyy")})";
+  }
+
   @override
   Widget build(BuildContext context) {
+    var label = includeTime ? renderDateTime(date) : renderDate(date);
     return RaisedButton(
       onPressed: onPressed,
       color: Colors.white,
@@ -27,7 +37,7 @@ class DateButton extends StatelessWidget {
           width: double.infinity,
           child: Column(
             children: [
-              Text(renderDate(date),
+              Text(label,
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,

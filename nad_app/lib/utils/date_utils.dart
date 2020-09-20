@@ -1,8 +1,13 @@
 import 'package:jiffy/jiffy.dart';
 
 String getFormattedDate(DateTime date) {
-  var jiffyDate = Jiffy(date)..startOf(Units.HOUR);
+  var jiffyDate = Jiffy(date)..startOf(Units.MINUTE);
   return jiffyDate.fromNow().capitalize();
+}
+
+String getFullFormattedDate(DateTime date) {
+  var jiffyDate = Jiffy(date)..startOf(Units.MINUTE);
+  return "${jiffyDate.fromNow().capitalize()} (${jiffyDate.format("dd/MM/yyyy")})";
 }
 
 // TODO: add tests

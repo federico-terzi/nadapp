@@ -9,7 +9,7 @@ class MealState {
   final List<Meal> meals;
 
   MealState({
-    this.meals
+    this.meals = const [],
   });
 
   MealState copyWith({

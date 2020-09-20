@@ -33,6 +33,7 @@ dependencies:
   flutter_animator: ^2.1.0
   flutter_redux: ^0.6.0
   jiffy: ^3.0.1
+  flutter_datetime_picker: ^1.4.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.8.0"

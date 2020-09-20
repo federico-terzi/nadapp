@@ -1,5 +1,6 @@
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/reducers/auth_reducer.dart';
+import 'package:nad_app/reducers/balance_reducer.dart';
 import 'package:nad_app/reducers/meal_reducer.dart';
 import 'package:nad_app/reducers/persistence_reducer.dart';
 
@@ -10,6 +11,7 @@ AppState rootReducer(AppState state, action) {
     auth: authReducer(state.auth, action),
     navigation: navigationReducer(state.navigation, action),
     meal: mealReducer(state.meal, action),
+    balance: balanceReducer(state.balance, action),
     persistence: persistenceReducer(state.persistence, action),
   );
 }
