@@ -36,11 +36,11 @@ class BalanceScreen extends StatelessWidget {
             body: Column(
               children: [
                 BigIconButton(
-                    text: "Aggiungi misurazione",
+                    text: balanceState.currentBalance == null ? "Aggiungi misurazione" : "Continua misurazione",
                     onPressed: () {
                       gotoAddMeasurementScreen(context);
                     },
-                    icon: Icons.add_circle_outline),
+                    icon: balanceState.currentBalance == null ? Icons.add_circle_outline : Icons.restore),
                 SizedBox(height: 20),
                 Text(
                   "Misurazioni recenti:",
@@ -52,6 +52,7 @@ class BalanceScreen extends StatelessWidget {
             ),
             fab: AppFab(
               tooltip: "Aggiungi misurazione",
+              icon: balanceState.currentBalance == null ? Icons.add_circle_outline : Icons.restore,
               onPressed: () {
                 gotoAddMeasurementScreen(context);
               },

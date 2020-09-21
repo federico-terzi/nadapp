@@ -3,6 +3,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:nad_app/middleware/logger_middleware.dart';
 import 'package:nad_app/middleware/login_middleware.dart';
 import 'package:nad_app/middleware/navigation_middleware.dart';
+import 'package:nad_app/middleware/preferences_middleware.dart';
 import 'package:nad_app/models/balance.dart';
 import 'package:nad_app/models/balance_state.dart';
 import 'package:nad_app/models/meal_state.dart';
@@ -12,7 +13,7 @@ import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/reducers/root_reducer.dart';
 import 'package:nad_app/theme/style.dart';
 import 'package:flutter/rendering.dart';
-import 'middleware/persistence_middleware.dart';
+import 'middleware/sql_middleware.dart';
 import 'models/meal.dart';
 import 'routes.dart';
 
@@ -59,7 +60,8 @@ void main() {
         loggerMiddleware,
         loginMiddleware,
         navigationMiddleware,
-        persistenceMiddleware
+        sqlMiddleware,
+        preferencesMiddleware,
       ]);
 
   runApp(NadApp(store: store));

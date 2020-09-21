@@ -1,12 +1,21 @@
+import 'package:nad_app/actions/balance_actions.dart';
 import 'package:nad_app/models/balance_state.dart';
 import 'package:redux/redux.dart';
 
 Reducer<BalanceState> balanceReducer = combineReducers([
-  //new TypedReducer<BalanceState, AddMealSuccess>(addMealSuccessReducer),
+  new TypedReducer<BalanceState, AddBalanceSuccess>(addBalanceSuccessReducer),
+  new TypedReducer<BalanceState, UpdateCurrentBalanceRequest>(updateCurrentBalanceRequestReducer),
 ]);
 
-//BalanceState addMealSuccessReducer(BalanceState mealState, AddMealSuccess action) {
-//  return mealState.copyWith(
-//    meals: List.from(mealState.meals)..add(action.meal),
-//  );
-//}
+BalanceState addBalanceSuccessReducer(BalanceState balanceState, AddBalanceSuccess action) {
+  return balanceState.copyWith(
+    currentBalance: null,
+    balances: List.from(balanceState.balances)..add(action.balance),
+  );
+}
+
+BalanceState updateCurrentBalanceRequestReducer(BalanceState balanceState, UpdateCurrentBalanceRequest action) {
+  return balanceState.copyWith(
+    currentBalance: action.balance
+  );
+}

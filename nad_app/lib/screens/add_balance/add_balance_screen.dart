@@ -12,7 +12,7 @@ class AddBalanceScreen extends StatelessWidget {
         converter: (store) => store.state,
         builder: (context, appState) {
           return AppScaffold(
-              title: "Aggiungi bilancio",
+              title: appState.balance.currentBalance == null ? "Aggiungi bilancio" : "Continua bilancio",
               body: CustomScrollView(
                 slivers: [
                   SliverFillRemaining(

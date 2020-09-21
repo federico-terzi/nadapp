@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:nad_app/actions/auth_actions.dart';
+import 'package:nad_app/actions/balance_actions.dart';
 import 'package:nad_app/actions/meal_actions.dart';
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/auth_state.dart';
@@ -12,6 +14,7 @@ import 'package:nad_app/models/meal.dart';
 import 'package:nad_app/models/persistence_state.dart';
 import 'package:nad_app/presentation/big_button.dart';
 import 'package:nad_app/presentation/date_button.dart';
+import 'package:nad_app/presentation/focus_text_form_field.dart';
 import 'package:nad_app/theme/style.dart';
 
 class AddBalanceForm extends StatefulWidget {
@@ -29,12 +32,79 @@ class AddBalanceForm extends StatefulWidget {
 class _AddBalanceFormState extends State<AddBalanceForm> {
   final _formKey = GlobalKey<FormState>();
 
-  DateTime date = DateTime.now();
-  Balance balance = Balance();
+  Balance balance;
+  bool alreadySubmitted = false;
+
+
+  @override
+  void initState() {
+    if (widget.balanceState.currentBalance != null) {
+      balance = widget.balanceState.currentBalance;
+    } else {
+      balance = Balance(date: DateTime.now());
+    }
+    super.initState();
+  }
+
+  void updateBalance(Balance balance) {
+    this.setState(() {
+      this.balance = balance;
+    });
+
+    StoreProvider.of<AppState>(context).dispatch(UpdateCurrentBalanceRequest(
+      balance: balance,
+    ));
+  }
+
+  Future<void> _showNotCompletedDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Bilancio incompleto'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Il bilancio non è ancora completo, mancano alcuni campi (evidenziati in rosso). Devi completarli per poterlo inviare.'),
+                Text(
+                  'Ricorda che puoi completare il bilancio anche in un secondo momento, senza perdere i dati finora inseriti.',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('Cosa vuoi fare?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Riprendi più tardi'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Finisci di completare',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      autovalidate: alreadySubmitted,
       key: _formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -51,14 +121,10 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
                   showTitleActions: true,
                   minTime: Jiffy().subtract(days: 30),
                   maxTime: DateTime.now(), onConfirm: (date) {
-                setState(() {
-                  this.date = date;
-
-                  // TODO: update balance
-                });
-              }, currentTime: date, locale: LocaleType.it);
+                updateBalance(balance.copyWith(date: date));
+              }, currentTime: balance.date, locale: LocaleType.it);
             },
-            date: date,
+            date: balance.date,
             includeTime: false,
           ),
           SizedBox(height: 20),
@@ -70,26 +136,24 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
           Row(
             children: [
               Flexible(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Massima'),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Massima mancante';
-                    }
-                    return null;
-                  },
-                  onTap: () {
-                    Scrollable.ensureVisible(context);
-                  },
-                  onSaved: (String value) {
-                    //meal = value;
-                  },
-                ),
-              ),
+                  child: FocusTextFormField(
+                    initialValue: balance.maxPressure != null ? balance.maxPressure.toString() : "",
+                keyboardType: TextInputType.number,
+                labelText: 'Massima',
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Massima mancante';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return "Numero non valido";
+                  }
+                  return null;
+                },
+                onUnfocused: (String value) {
+                  updateBalance(
+                      balance.copyWith(maxPressure: int.parse(value)));
+                },
+              )),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -98,26 +162,24 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
                 ),
               ),
               Flexible(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Minima'),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Minima mancante';
-                    }
-                    return null;
-                  },
-                  onTap: () {
-                    Scrollable.ensureVisible(context);
-                  },
-                  onSaved: (String value) {
-                    //meal = value;
-                  },
-                ),
-              ),
+                  child: FocusTextFormField(
+                    initialValue: balance.minPressure != null ? balance.minPressure.toString() : "",
+                keyboardType: TextInputType.number,
+                labelText: 'Minima',
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Minima mancante';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return "Numero non valido";
+                  }
+                  return null;
+                },
+                onUnfocused: (String value) {
+                  updateBalance(
+                      balance.copyWith(minPressure: int.parse(value)));
+                },
+              )),
             ],
           ),
           SizedBox(height: 20),
@@ -126,24 +188,21 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.heartFrequency != null ? balance.heartFrequency.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "BPM",
-            ),
+            labelText: 'BPM',
             validator: (value) {
               if (value.isEmpty) {
                 return 'Per favore, inserisci la tua frequenza cardiaca';
               }
+              if (int.tryParse(value) == null) {
+                return "Numero non valido";
+              }
               return null;
             },
-            onTap: () {
-              //Scrollable.ensureVisible(context);
-            },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              updateBalance(balance.copyWith(heartFrequency: int.parse(value)));
             },
           ),
           SizedBox(height: 20),
@@ -152,24 +211,23 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.weight != null ? balance.weight.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "Kg",
-            ),
+            labelText: 'Kg',
             validator: (value) {
               if (value.isEmpty) {
                 return 'Per favore, inserisci il tuo peso corporeo';
               }
+              value = value.replaceAll(",", ".");
+              if (double.tryParse(value) == null) {
+                return "Numero non valido";
+              }
               return null;
             },
-            onTap: () {
-              //Scrollable.ensureVisible(context);
-            },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              value = value.replaceAll(",", ".");
+              updateBalance(balance.copyWith(weight: double.parse(value)));
             },
           ),
           SizedBox(height: 20),
@@ -178,24 +236,21 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.diuresis != null ? balance.diuresis.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "ML/24h",
-            ),
+            labelText: "ML/24h",
             validator: (value) {
               if (value.isEmpty) {
                 return 'Per favore, inserisci il volume di diuresi';
               }
+              if (int.tryParse(value) == null) {
+                return "Numero non valido";
+              }
               return null;
             },
-            onTap: () {
-              //Scrollable.ensureVisible(context);
-            },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              updateBalance(balance.copyWith(diuresis: int.parse(value)));
             },
           ),
           SizedBox(height: 20),
@@ -204,22 +259,20 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.fecesCount != null ? balance.fecesCount.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "N/24h",
-            ),
+            labelText: "N/24h",
             validator: (value) {
-              // TODO check if number
+              if (value.trim().isNotEmpty && int.tryParse(value) == null) {
+                return "Numero non valido";
+              }
               return null;
             },
-            onTap: () {
-              //Scrollable.ensureVisible(context);
-            },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(balance.copyWith(fecesCount: int.parse(value)));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -245,9 +298,8 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
                   hintText: 'Seleziona la consistenza, se applicabile'),
               style: Theme.of(context).textTheme.bodyText1,
               onChanged: (String newValue) {
-                setState(() {
-                  balance = this.balance.copyWith(fecesTexture: newValue);
-                });
+                updateBalance(balance.copyWith(fecesTexture: newValue));
+                FocusScope.of(context).requestFocus(new FocusNode());
               },
               items: <String>[
                 "Acquosa",
@@ -269,18 +321,20 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.ostomyVolume != null ? balance.ostomyVolume.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "ML/24h",
-            ),
-            onTap: () {
-              //Scrollable.ensureVisible(context);
+            labelText: "ML/24h",
+            validator: (value) {
+              if (value.trim().isNotEmpty && int.tryParse(value) == null) {
+                return "Numero non valido";
+              }
+              return null;
             },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(balance.copyWith(ostomyVolume: int.parse(value)));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -289,18 +343,20 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.pegVolume != null ? balance.pegVolume.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "ML/24h",
-            ),
-            onTap: () {
-              //Scrollable.ensureVisible(context);
+            labelText: "ML/24h",
+            validator: (value) {
+              if (value.trim().isNotEmpty && int.tryParse(value) == null) {
+                return "Numero non valido";
+              }
+              return null;
             },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(balance.copyWith(pegVolume: int.parse(value)));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -309,17 +365,20 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.otherGastrointestinalLosses,
             minLines: 3,
             maxLines: 3,
             keyboardType: TextInputType.multiline,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "Specificare quali e quante",
-            ),
-            onSaved: (String value) {
-              //meal = value;
+            labelText: "Specificare quali e quante",
+            validator: (value) {
+              return null;
+            },
+            onUnfocused: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(
+                    balance.copyWith(otherGastrointestinalLosses: value));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -328,18 +387,19 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.parenteralNutritionVolume != null ? balance.parenteralNutritionVolume.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "ML/24h",
-            ),
-            onTap: () {
-              //Scrollable.ensureVisible(context);
+            labelText: "ML/24h",
+            validator: (value) {
+              if (value.trim().isNotEmpty && int.tryParse(value) == null) {
+                return "Numero non valido";
+              }
+              return null;
             },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              updateBalance(balance.copyWith(
+                  parenteralNutritionVolume: int.parse(value)));
             },
           ),
           SizedBox(height: 20),
@@ -348,17 +408,19 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.otherIntravenousLiquids,
             minLines: 3,
             maxLines: 3,
             keyboardType: TextInputType.multiline,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "Specificare quali e quante",
-            ),
-            onSaved: (String value) {
-              //meal = value;
+            labelText: "Specificare quali e quante",
+            validator: (value) {
+              return null;
+            },
+            onUnfocused: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(balance.copyWith(otherIntravenousLiquids: value));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -367,24 +429,21 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.osLiquids != null ? balance.osLiquids.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "ML/24h",
-            ),
+            labelText: "ML/24h",
             validator: (value) {
               if (value.isEmpty) {
-                return 'Per favore, inserisci il volume liquidi per OS';
+                return 'Per favore, inserisci i liquidi per OS';
+              }
+              if (int.tryParse(value) == null) {
+                return "Numero non valido";
               }
               return null;
             },
-            onTap: () {
-              //Scrollable.ensureVisible(context);
-            },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              updateBalance(balance.copyWith(osLiquids: int.parse(value)));
             },
           ),
           SizedBox(height: 20),
@@ -393,21 +452,22 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 10),
-          TextFormField(
+          FocusTextFormField(
+            initialValue: balance.intravenousLiquidsVolume != null ? balance.intravenousLiquidsVolume.toString() : "",
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: "ML/24h",
-            ),
+            labelText: "ML/24h",
             validator: (value) {
               if (value.isEmpty) {
-                return 'Per favore, inserisci il volume liquidi endovena';
+                return 'Per favore, inserisci il volume di liquidi endovena';
+              }
+              if (int.tryParse(value) == null) {
+                return "Numero non valido";
               }
               return null;
             },
-            onSaved: (String value) {
-              //meal = value;
+            onUnfocused: (String value) {
+              updateBalance(
+                  balance.copyWith(intravenousLiquidsVolume: int.parse(value)));
             },
           ),
           SizedBox(height: 30),
@@ -420,18 +480,17 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             text: "Concludi bilancio",
             loading: this.widget.persistenceState.isSaving,
             onPressed: () {
+              setState(() {
+                alreadySubmitted = true;
+              });
+
               // Validate returns true if the form is valid, otherwise false.
               if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-
-                /*
-                StoreProvider.of<AppState>(context).dispatch(AddMealRequest(
-                  meal: Meal(
-                    date: date,
-                    meal: meal.trim(),
-                  )
+                StoreProvider.of<AppState>(context).dispatch(AddBalanceRequest(
+                  balance: balance,
                 ));
-                 */
+              } else {
+                _showNotCompletedDialog();
               }
             },
           ),

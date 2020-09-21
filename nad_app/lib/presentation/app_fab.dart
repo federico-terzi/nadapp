@@ -4,8 +4,9 @@ import 'package:nad_app/theme/style.dart';
 class AppFab extends StatelessWidget {
   final String tooltip;
   final VoidCallback onPressed;
+  final IconData icon;
 
-  AppFab({this.tooltip, this.onPressed});
+  AppFab({this.tooltip, this.onPressed, this.icon = Icons.add});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class AppFab extends StatelessWidget {
       child: FloatingActionButton(
         tooltip: tooltip,
         onPressed: onPressed,
-        child: const Icon(Icons.add, size: 40),
+        child: Icon(this.icon, size: 40),
       ),
     );
   }
