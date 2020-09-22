@@ -16,6 +16,7 @@ import 'package:nad_app/presentation/big_button.dart';
 import 'package:nad_app/presentation/date_button.dart';
 import 'package:nad_app/presentation/focus_text_form_field.dart';
 import 'package:nad_app/theme/style.dart';
+import 'package:uuid/uuid.dart';
 
 class AddBalanceForm extends StatefulWidget {
   final PersistenceState persistenceState;
@@ -41,7 +42,8 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
     if (widget.balanceState.currentBalance != null) {
       balance = widget.balanceState.currentBalance;
     } else {
-      balance = Balance(date: DateTime.now());
+      var uuid = Uuid();
+      balance = Balance(uuid: uuid.v4(), date: DateTime.now());
     }
     super.initState();
   }

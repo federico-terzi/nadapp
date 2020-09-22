@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 @immutable
 class Balance {
+  final String uuid;
   final DateTime date;
   final int minPressure;
   final int maxPressure;
@@ -19,7 +20,8 @@ class Balance {
   final int intravenousLiquidsVolume;
 
   Balance(
-      {this.date,
+      {this.uuid,
+        this.date,
       this.minPressure,
       this.maxPressure,
       this.heartFrequency,
@@ -36,7 +38,8 @@ class Balance {
       this.intravenousLiquidsVolume});
 
   Balance copyWith(
-      {date,
+      {uuid,
+        date,
       minPressure,
       maxPressure,
       heartFrequency,
@@ -52,6 +55,7 @@ class Balance {
       osLiquids,
       intravenousLiquidsVolume}) {
     return Balance(
+      uuid: uuid ?? this.uuid,
         date: date ?? this.date,
         minPressure: minPressure ?? this.minPressure,
         maxPressure: maxPressure ?? this.maxPressure,
@@ -73,8 +77,46 @@ class Balance {
             intravenousLiquidsVolume ?? this.intravenousLiquidsVolume);
   }
 
+  Balance.fromJson(Map<String, dynamic> json)
+      : uuid = json['uuid'],
+        date = DateTime.fromMillisecondsSinceEpoch(json['date']),
+        minPressure = json['minPressure'],
+        maxPressure = json['maxPressure'],
+        heartFrequency = json['heartFrequency'],
+        weight = json['weight'],
+        diuresis = json['diuresis'],
+        fecesCount = json['fecesCount'],
+        fecesTexture = json['fecesTexture'],
+        ostomyVolume = json['ostomyVolume'],
+        pegVolume = json['pegVolume'],
+        otherGastrointestinalLosses = json['otherGastrointestinalLosses'],
+        parenteralNutritionVolume = json['parenteralNutritionVolume'],
+        otherIntravenousLiquids = json['otherIntravenousLiquids'],
+        osLiquids = json['parenteralNutritionVolume'],
+        intravenousLiquidsVolume = json['intravenousLiquidsVolume'];
+
+  Map<String, dynamic> toJson() =>
+      {
+        'uuid': uuid,
+        'date': date.millisecondsSinceEpoch,
+        'minPressure': minPressure,
+        'maxPressure': maxPressure,
+        'heartFrequency': heartFrequency,
+        'weight': weight,
+        'diuresis': diuresis,
+        'fecesCount': fecesCount,
+        'fecesTexture': fecesTexture,
+        'ostomyVolume': ostomyVolume,
+        'pegVolume': pegVolume,
+        'otherGastrointestinalLosses': otherGastrointestinalLosses,
+        'parenteralNutritionVolume': parenteralNutritionVolume,
+        'otherIntravenousLiquids': otherIntravenousLiquids,
+        'osLiquids': osLiquids,
+        'intravenousLiquidsVolume': intravenousLiquidsVolume,
+      };
+
   @override
   String toString() {
-    return 'Balance{date: $date, minPressure: $minPressure, maxPressure: $maxPressure, heartFrequency: $heartFrequency, weight: $weight, diuresis: $diuresis, fecesCount: $fecesCount, fecesTexture: $fecesTexture, ostomyVolume: $ostomyVolume, pegVolume: $pegVolume, otherGastrointestinalLosses: $otherGastrointestinalLosses, parenteralNutritionVolume: $parenteralNutritionVolume, otherIntravenousLiquids: $otherIntravenousLiquids, osLiquids: $osLiquids, intravenousLiquidsVolume: $intravenousLiquidsVolume}';
+    return 'Balance{uuid: $uuid, date: $date, minPressure: $minPressure, maxPressure: $maxPressure, heartFrequency: $heartFrequency, weight: $weight, diuresis: $diuresis, fecesCount: $fecesCount, fecesTexture: $fecesTexture, ostomyVolume: $ostomyVolume, pegVolume: $pegVolume, otherGastrointestinalLosses: $otherGastrointestinalLosses, parenteralNutritionVolume: $parenteralNutritionVolume, otherIntravenousLiquids: $otherIntravenousLiquids, osLiquids: $osLiquids, intravenousLiquidsVolume: $intravenousLiquidsVolume}';
   }
 }

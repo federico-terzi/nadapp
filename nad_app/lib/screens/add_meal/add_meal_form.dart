@@ -10,6 +10,7 @@ import 'package:nad_app/models/meal.dart';
 import 'package:nad_app/models/persistence_state.dart';
 import 'package:nad_app/presentation/big_button.dart';
 import 'package:nad_app/presentation/date_button.dart';
+import 'package:uuid/uuid.dart';
 
 class AddMealForm extends StatefulWidget {
   final PersistenceState persistenceState;
@@ -85,8 +86,11 @@ class _AddMealFormState extends State<AddMealForm> {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
 
+                var uuid = Uuid();
+
                 StoreProvider.of<AppState>(context).dispatch(AddMealRequest(
                   meal: Meal(
+                    uuid: uuid.v4(),
                     date: date,
                     meal: meal.trim(),
                   )

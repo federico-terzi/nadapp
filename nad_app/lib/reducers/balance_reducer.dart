@@ -10,6 +10,7 @@ Reducer<BalanceState> balanceReducer = combineReducers([
 BalanceState addBalanceSuccessReducer(BalanceState balanceState, AddBalanceSuccess action) {
   return balanceState.copyWith(
     currentBalance: null,
+    // TODO: sort by date
     balances: List.from(balanceState.balances)..add(action.balance),
   );
 }

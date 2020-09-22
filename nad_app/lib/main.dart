@@ -1,70 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:nad_app/actions/app_actions.dart';
+import 'package:nad_app/db/db.dart';
+import 'package:nad_app/init.dart';
 import 'package:nad_app/middleware/logger_middleware.dart';
 import 'package:nad_app/middleware/login_middleware.dart';
 import 'package:nad_app/middleware/navigation_middleware.dart';
 import 'package:nad_app/middleware/preferences_middleware.dart';
+import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/balance.dart';
 import 'package:nad_app/models/balance_state.dart';
 import 'package:nad_app/models/meal_state.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/reducers/root_reducer.dart';
 import 'package:nad_app/theme/style.dart';
-import 'package:flutter/rendering.dart';
+import 'package:redux/redux.dart';
+import 'package:sqflite/sqflite.dart';
+
 import 'middleware/sql_middleware.dart';
 import 'models/meal.dart';
 import 'routes.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-final initialState = AppState(
-    meal: MealState(meals: [
-      Meal(
-          date: DateTime.now(),
-          meal:
-              "3 fette biscottate con una tazza di latte\n20 grammi di marmellata di prugne"),
-      Meal(
-          date: Jiffy().subtract(days: 10).toLocal(),
-          meal:
-              "3 fette biscottate con una tazza di latte\n20 grammi di marmellata di prugne")
-    ]),
-    balance: BalanceState(
-      balances: [
-        Balance(
-          date: DateTime.now(),
-          minPressure: 60,
-          maxPressure: 120,
-          heartFrequency: 80,
-          weight: 80.2,
-          diuresis: 123,
-          fecesCount: 2,
-          fecesTexture: "formata",
-          ostomyVolume: 12,
-          pegVolume: 23,
-          otherGastrointestinalLosses: "23 ml di acqua",
-          osLiquids: 123,
-          parenteralNutritionVolume: 25,
-          intravenousLiquidsVolume: 0,
-        )
-      ],
-    ));
-
 void main() {
   Jiffy.locale("it");
-  // TODO: read from preferences if the user is logged in
+
+
+  final db = NadDatabase();
+
   final store = Store<AppState>(rootReducer,
-      initialState: initialState,
+      initialState: AppState(),
       middleware: [
         loggerMiddleware,
         loginMiddleware,
         navigationMiddleware,
-        sqlMiddleware,
+        createSqlMiddleware(db),
         preferencesMiddleware,
       ]);
 
   runApp(NadApp(store: store));
+
+  // Load the initial state at startup
+  initializeState(db).then((state) => store.dispatch(AppInitialized(state: state)));
 }
 
 class NadApp extends StatelessWidget {
@@ -81,7 +60,7 @@ class NadApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         title: 'NAD-APP',
         theme: appTheme(),
-        initialRoute: "/intro",
+        initialRoute: "/init",
         onGenerateRoute: routeFactory,
       ),
     );

@@ -8,6 +8,7 @@ Reducer<MealState> mealReducer = combineReducers([
 
 MealState addMealSuccessReducer(MealState mealState, AddMealSuccess action) {
   return mealState.copyWith(
+    // TODO: sort by date
     meals: List.from(mealState.meals)..add(action.meal),
   );
 }
