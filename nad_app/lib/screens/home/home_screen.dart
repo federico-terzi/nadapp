@@ -12,22 +12,19 @@ import 'package:nad_app/screens/login/login_phase_one_form.dart';
 import 'package:nad_app/theme/style.dart';
 
 class HomeScreen extends StatelessWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: "Test");
+  final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>(debugLabel: "Test");
 
   List<Widget> generateCards(BuildContext context) {
     var cards = [
       HomeCard(
           image: "assets/diario.png",
           label: "Diario alimentare",
-          onPressed: () => {
-            Navigator.of(context).pushNamed(DIARY_ROUTE)
-          }),
+          onPressed: () => {Navigator.of(context).pushNamed(DIARY_ROUTE)}),
       HomeCard(
           image: "assets/bilancio.png",
           label: "Bilancio idrico",
-          onPressed: () => {
-            Navigator.of(context).pushNamed(BALANCE_ROUTE)
-          }),
+          onPressed: () => {Navigator.of(context).pushNamed(BALANCE_ROUTE)}),
       HomeCard(
           image: "assets/referti.png",
           label: "I miei referti",
@@ -37,9 +34,10 @@ class HomeScreen extends StatelessWidget {
           label: "Informati",
           onPressed: () => {}),
       HomeCard(
-          image: "assets/centroiicb.png",
-          label: "Contatta centro IICB",
-          onPressed: () => {}),
+        image: "assets/centroiicb.png",
+        label: "Contatta centro IICB",
+        onPressed: () => {Navigator.of(context).pushNamed(CONTACT_ROUTE)},
+      ),
     ];
 
     // Add the spacing between them
@@ -59,60 +57,61 @@ class HomeScreen extends StatelessWidget {
         final darkTheme =
             Theme.of(context).copyWith(textTheme: homeTextTheme());
         return Theme(
-          data: darkTheme,
-          child: FadingScaffold(
-            scaffoldKey: scaffoldKey,
-            delay: 200,
-            gradient: true,
-            children: [
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FadeInLeft(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                        size: 40,
-                        semanticLabel: 'Apri menu',
+            data: darkTheme,
+            child: FadingScaffold(
+              scaffoldKey: scaffoldKey,
+              delay: 200,
+              gradient: true,
+              children: [
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FadeInLeft(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.menu,
+                          color: Colors.white,
+                          size: 40,
+                          semanticLabel: 'Apri menu',
+                        ),
+                        onPressed: () {
+                          scaffoldKey.currentState.openDrawer();
+                        },
                       ),
-                      onPressed: () {
-                        scaffoldKey.currentState.openDrawer();
-                      },
+                      preferences: AnimationPreferences(
+                          offset: Duration(milliseconds: 500)),
                     ),
-                    preferences: AnimationPreferences(offset: Duration(milliseconds: 500)),
-                  ),
-                  Image.asset("assets/logowhite.png", height: 130),
-                  FadeInRight(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.help,
-                        color: Colors.white,
-                        size: 40,
-                        semanticLabel: 'Aiuto',
+                    Image.asset("assets/logowhite.png", height: 130),
+                    FadeInRight(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.phone,
+                          color: Colors.white,
+                          size: 40,
+                          semanticLabel: 'Contatti',
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(CONTACT_ROUTE);
+                        },
                       ),
-                      onPressed: () {
-                        // TODO
-                      },
+                      preferences: AnimationPreferences(
+                          offset: Duration(milliseconds: 500)),
                     ),
-                    preferences: AnimationPreferences(offset: Duration(milliseconds: 500)),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Text("Buongiorno ${appState.auth.user.name},",
-                  style: darkTheme.textTheme.headline1),
-              SizedBox(height: 5),
-              Text("come posso aiutarti?",
-                  style: darkTheme.textTheme.headline2),
-              SizedBox(height: 30),
-              ...generateCards(context),
-            ],
-            drawer: homeDrawer(context),
-          )
-        );
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text("Buongiorno ${appState.auth.user.name},",
+                    style: darkTheme.textTheme.headline1),
+                SizedBox(height: 5),
+                Text("come posso aiutarti?",
+                    style: darkTheme.textTheme.headline2),
+                SizedBox(height: 30),
+                ...generateCards(context),
+              ],
+              drawer: homeDrawer(context),
+            ));
       },
     );
   }
