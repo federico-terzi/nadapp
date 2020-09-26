@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:nad_app/db/balance_repository.dart';
 import 'package:nad_app/db/db.dart';
 import 'package:nad_app/db/diary_repository.dart';
 import 'package:nad_app/middleware/preferences_middleware.dart';
@@ -35,7 +36,7 @@ Future<AppState> initializeState(NadDatabase db) async {
   String encodedCurrentBalance = prefs.getString(CURRENT_BALANCE_PREFERENCE);
   if (encodedCurrentBalance != null) {
     try {
-      Balance currentBalance = Balance.fromJson(jsonDecode(encodedCurrentBalance));
+      Balance currentBalance = Balance.fromMap(jsonDecode(encodedCurrentBalance));
       state = state.copyWith(balance: BalanceState(
         currentBalance: currentBalance,
       ));
@@ -50,7 +51,11 @@ Future<AppState> initializeState(NadDatabase db) async {
   // Load the SQLite data to app state
   var diaryRepository = DiaryRepository(db);
   var meals = await diaryRepository.getMeals();
-  state = state.copyWith(meal: MealState(meals: meals));
+  state = state.copyWith(meal: state.meal.copyWith(meals: meals));
+
+  var balanceRepository = BalanceRepository(db);
+  var balances = await balanceRepository.getBalances();
+  state = state.copyWith(balance: state.balance.copyWith(balances: balances));
 
   return state;
 }

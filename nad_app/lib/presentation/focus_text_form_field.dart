@@ -9,11 +9,12 @@ class FocusTextFormField extends StatefulWidget {
   final int maxLines;
 
   final void Function(String) onUnfocused;
+  final void Function(String) onSaved;
   final String Function(String) validator;
 
 
   FocusTextFormField({this.initialValue = "", this.keyboardType = TextInputType
-      .text, this.labelText,
+      .text, this.labelText, this.onSaved,
     this.onUnfocused, this.validator, this.minLines, this.maxLines});
 
   @override
@@ -78,6 +79,7 @@ class _FocusTextFormFieldState extends State<FocusTextFormField> {
               errorText = widget.validator(newValue);
             });
           },
+          onSaved: widget.onSaved,
         ),
       ),
     );

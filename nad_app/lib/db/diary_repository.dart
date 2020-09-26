@@ -19,4 +19,12 @@ class DiaryRepository {
       return Meal.fromMap(maps[i]);
     });
   }
+
+  Future<List<Meal>> getUnsyncedMeals() async {
+    var db = await this.db.get();
+    final List<Map<String, dynamic>> maps = await db.query('diary', where: 'dirty = 1', orderBy: "date ASC");
+    return List.generate(maps.length, (i) {
+      return Meal.fromMap(maps[i]);
+    });
+  }
 }

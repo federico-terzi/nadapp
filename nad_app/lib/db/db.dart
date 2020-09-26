@@ -12,6 +12,28 @@ const MIGRATIONS = [
     "dirty"	INTEGER NOT NULL DEFAULT 1
   );
   ''',
+  '''
+  CREATE TABLE "balances" (
+    "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "uuid"	TEXT NOT NULL UNIQUE,
+    "date"	INTEGER NOT NULL,
+    "minPressure"	INTEGER NOT NULL,
+    "maxPressure"	INTEGER NOT NULL,
+    "heartFrequency"	INTEGER NOT NULL,
+    "weight" REAL NOT NULL,
+    "diuresis"	INTEGER NOT NULL,
+    "fecesCount"	INTEGER,
+    "fecesTexture"	TEXT,
+    "ostomyVolume"	INTEGER,
+    "pegVolume"	INTEGER,
+    "otherGastrointestinalLosses"	TEXT,
+    "parenteralNutritionVolume"	INTEGER,
+    "otherIntravenousLiquids"	TEXT,
+    "osLiquids"	INTEGER NOT NULL,
+    "intravenousLiquidsVolume"	INTEGER NOT NULL,
+    "dirty"	INTEGER NOT NULL DEFAULT 1
+  );
+  ''',
 ];
 
 Future<Database> _openNadDatabase() async {

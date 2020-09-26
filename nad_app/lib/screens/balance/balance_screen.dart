@@ -52,7 +52,7 @@ class BalanceScreen extends StatelessWidget {
             ),
             fab: AppFab(
               tooltip: "Aggiungi misurazione",
-              icon: balanceState.currentBalance == null ? Icons.add_circle_outline : Icons.restore,
+              icon: balanceState.currentBalance == null ? Icons.add : Icons.restore,
               onPressed: () {
                 gotoAddMeasurementScreen(context);
               },

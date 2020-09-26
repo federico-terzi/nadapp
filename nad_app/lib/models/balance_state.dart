@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:nad_app/models/balance.dart';
+import 'package:nad_app/utils/state_utils.dart';
+import 'package:quiver/core.dart';
 
 @immutable
 class BalanceState {
@@ -13,11 +15,11 @@ class BalanceState {
 
   BalanceState copyWith({
     List<Balance> balances,
-    Balance currentBalance,
+    Optional<Balance> currentBalance,
   }) {
     return new BalanceState(
       balances: balances ?? this.balances,
-      currentBalance: currentBalance ?? this.currentBalance,
+      currentBalance: reduceState(currentBalance, this.currentBalance),
     );
   }
 }

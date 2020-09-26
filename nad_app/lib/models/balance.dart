@@ -77,7 +77,7 @@ class Balance {
             intravenousLiquidsVolume ?? this.intravenousLiquidsVolume);
   }
 
-  Balance.fromJson(Map<String, dynamic> json)
+  Balance.fromMap(Map<String, dynamic> json)
       : uuid = json['uuid'],
         date = DateTime.fromMillisecondsSinceEpoch(json['date']),
         minPressure = json['minPressure'],
@@ -95,7 +95,7 @@ class Balance {
         osLiquids = json['parenteralNutritionVolume'],
         intravenousLiquidsVolume = json['intravenousLiquidsVolume'];
 
-  Map<String, dynamic> toJson() =>
+  Map<String, dynamic> toMap() =>
       {
         'uuid': uuid,
         'date': date.millisecondsSinceEpoch,
@@ -114,6 +114,8 @@ class Balance {
         'osLiquids': osLiquids,
         'intravenousLiquidsVolume': intravenousLiquidsVolume,
       };
+
+  Map<String, dynamic> toJson() => this.toMap();
 
   @override
   String toString() {
