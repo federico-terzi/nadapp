@@ -9,6 +9,9 @@ import 'package:nad_app/screens/init/init_screen.dart';
 import 'package:nad_app/screens/intro/intro_screen.dart';
 import 'package:nad_app/screens/login/login_screen.dart';
 import 'package:nad_app/screens/patient_check/patient_check_screen.dart';
+import 'package:nad_app/screens/useful_information/iicb_screen.dart';
+import 'package:nad_app/screens/useful_information/iicb_therapy_screen.dart';
+import 'package:nad_app/screens/useful_information/useful_information_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 const INIT_ROUTE = "/init";
@@ -21,6 +24,9 @@ const ADD_MEAL_ROUTE = "/addMeal";
 const BALANCE_ROUTE = "/balance";
 const ADD_BALANCE_ROUTE = "/addBalance";
 const CONTACT_ROUTE = "/contact";
+const USEFUL_INFORMATION_ROUTE = "/usefulInfo";
+const USEFUL_INFORMATION_IICB_ROUTE = "/usefulInfoIICB";
+const USEFUL_INFORMATION_IICB_THERAPY_ROUTE = "/usefulInfoIICBTherapy";
 
 PageTransition<dynamic> routeFactory(RouteSettings settings) {
   switch (settings.name) {
@@ -53,6 +59,15 @@ PageTransition<dynamic> routeFactory(RouteSettings settings) {
       break;
     case CONTACT_ROUTE:
       return PageTransition(child: ContactScreen(), type: PageTransitionType.rightToLeft);
+      break;
+    case USEFUL_INFORMATION_ROUTE:
+      return PageTransition(child: UsefulInformationScreen(), type: PageTransitionType.rightToLeft);
+      break;
+    case USEFUL_INFORMATION_IICB_ROUTE:
+      return PageTransition(child: UsefulInformationIICBScreen(), type: PageTransitionType.rightToLeft);
+      break;
+    case USEFUL_INFORMATION_IICB_THERAPY_ROUTE:
+      return PageTransition(child: UsefulInformationIICBTherapyScreen(), type: PageTransitionType.rightToLeft);
       break;
     default:
       return null;

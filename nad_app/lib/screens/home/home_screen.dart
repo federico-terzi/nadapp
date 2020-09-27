@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
       HomeCard(
           image: "assets/informati.png",
           label: "Informati",
-          onPressed: () => {}),
+          onPressed: () => {Navigator.of(context).pushNamed(USEFUL_INFORMATION_ROUTE)}),
       HomeCard(
         image: "assets/centroiicb.png",
         label: "Contatta centro IICB",

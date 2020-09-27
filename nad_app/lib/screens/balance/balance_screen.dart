@@ -26,6 +26,34 @@ class BalanceScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(ADD_BALANCE_ROUTE);
   }
 
+  List<Widget> _getContent(BuildContext context, List<Balance> balances) {
+    if (balances.length > 0) {
+      return [
+        Text(
+          "Misurazioni più recenti:",
+          textAlign: TextAlign.center,
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline4,
+        ),
+        SizedBox(height: 10),
+        Expanded(child: _getRecentBalances(balances)),
+      ];
+    } else {
+      return [
+        Text(
+          "Non hai ancora registrato alcuna misurazione, utilizza il pulsante in basso per iniziare.",
+          textAlign: TextAlign.center,
+          style: Theme
+              .of(context)
+              .textTheme
+              .bodyText1,
+        ),
+      ];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, BalanceState>(
@@ -35,28 +63,15 @@ class BalanceScreen extends StatelessWidget {
             title: "Bilancio idrico",
             body: Column(
               children: [
-                BigIconButton(
-                    text: balanceState.currentBalance == null ? "Aggiungi misurazione" : "Continua misurazione",
-                    onPressed: () {
-                      gotoAddMeasurementScreen(context);
-                    },
-                    icon: balanceState.currentBalance == null ? Icons.add_circle_outline : Icons.restore),
-                SizedBox(height: 20),
-                Text(
-                  "Misurazioni recenti:",
-                  style: Theme.of(context).textTheme.headline3,
-                ),
-                SizedBox(height: 10),
-                Expanded(child: _getRecentBalances(balanceState.balances)),
+                ..._getContent(context, balanceState.balances)
               ],
             ),
             fab: AppFab(
-              tooltip: "Aggiungi misurazione",
-              icon: balanceState.currentBalance == null ? Icons.add : Icons.restore,
-              onPressed: () {
-                gotoAddMeasurementScreen(context);
-              },
-            ),
+                text: balanceState.currentBalance == null ? "Aggiungi misurazione" : "Continua misurazione",
+                onPressed: () {
+                  gotoAddMeasurementScreen(context);
+                },
+                icon: balanceState.currentBalance == null ? Icons.add : Icons.restore),
           );
         });
   }

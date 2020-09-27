@@ -19,20 +19,55 @@ class DiaryScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: ListTile(
-                title: Text(getFormattedDate(meals[reverseIndex].date), style: Theme.of(context).textTheme.headline4),
+                title: Text(
+                    getFormattedDate(meals[reverseIndex].date), style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4),
                 subtitle:
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Text(meals[reverseIndex].meal, style: Theme.of(context).textTheme.bodyText2),
+                  child: Text(meals[reverseIndex].meal, style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText2),
                 ),
               ),
             ),
           );
         });
   }
-  
+
   void gotoAddMealScreen(BuildContext context) {
     Navigator.of(context).pushNamed(ADD_MEAL_ROUTE);
+  }
+
+  List<Widget> _getContent(BuildContext context, List<Meal> meals) {
+    if (meals.length > 0) {
+      return [
+        Text(
+          "Pasti più recenti:",
+          textAlign: TextAlign.center,
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline4,
+        ),
+        SizedBox(height: 10),
+        Expanded(child: _getRecentMeals(meals)),
+      ];
+    } else {
+      return [
+        Text(
+          "Non hai ancora registrato alcun pasto, utilizza il pulsante in basso per iniziare.",
+          textAlign: TextAlign.center,
+          style: Theme
+              .of(context)
+              .textTheme
+              .bodyText1,
+        ),
+      ];
+    }
   }
 
   @override
@@ -44,23 +79,12 @@ class DiaryScreen extends StatelessWidget {
             title: "Diario alimentare",
             body: Column(
               children: [
-                BigIconButton(
-                    text: "Aggiungi pasto",
-                    onPressed: () {
-                      gotoAddMealScreen(context);
-                    },
-                    icon: Icons.add_circle_outline),
-                SizedBox(height: 20),
-                Text(
-                  "Pasti recenti:",
-                  style: Theme.of(context).textTheme.headline3,
-                ),
-                SizedBox(height: 10),
-                Expanded(child: _getRecentMeals(mealState.meals)),
+                ..._getContent(context, mealState.meals)
               ],
             ),
             fab: AppFab(
-              tooltip: "Aggiungi pasto",
+              icon: Icons.add,
+              text: "Aggiungi pasto",
               onPressed: () {
                 gotoAddMealScreen(context);
               },
