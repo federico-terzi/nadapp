@@ -25,7 +25,7 @@ class HomeCard extends StatelessWidget {
                 Image.asset(image, height: 90),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                  child: Text(label, style: Theme.of(context).textTheme.button),
+                  child: Text(label, textAlign: TextAlign.center, style: Theme.of(context).textTheme.button),
                 ),
               ],
             ),

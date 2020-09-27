@@ -28,7 +28,9 @@ class HomeScreen extends StatelessWidget {
       HomeCard(
           image: "assets/referti.png",
           label: "I miei referti",
-          onPressed: () => {}),
+          onPressed: () => {
+            // TODO
+          }),
       HomeCard(
           image: "assets/informati.png",
           label: "Informati",

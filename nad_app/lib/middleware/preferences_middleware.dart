@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const USER_PREFERENCE = "USER_PREFERENCE";
 const CURRENT_BALANCE_PREFERENCE = "CURRENT_BALANCE_PREFERENCE";
+const MY_DOCTORS_PREFERENCE = "MY_DOCTORS_PREFERENCE";
 
 void preferencesMiddleware(Store<AppState> store, action, NextDispatcher next) {
   if (action is LoginPhaseTwoSuccess) {

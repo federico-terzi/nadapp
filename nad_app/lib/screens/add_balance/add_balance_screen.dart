@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/presentation/app_scaffold.dart';
 import 'package:nad_app/presentation/big_info_button.dart';
+import 'package:nad_app/routes.dart';
 import 'package:nad_app/screens/add_balance/add_balance_form.dart';
 
 class AddBalanceScreen extends StatelessWidget {
@@ -23,7 +24,9 @@ class AddBalanceScreen extends StatelessWidget {
                         BigInfoButton(
                           text:
                               "Se non ricordi come compilare il bilancio idrico, clicca qui!",
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(ADD_BALANCE_TIPS_ROUTE);
+                          },
                         ),
                         SizedBox(height: 20),
                         AddBalanceForm(persistenceState: appState.persistence, balanceState: appState.balance),

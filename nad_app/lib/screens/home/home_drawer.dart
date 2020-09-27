@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nad_app/middleware/preferences_middleware.dart';
+import 'package:nad_app/routes.dart';
 import 'package:nad_app/theme/style.dart';
 
 const DRAWER_ICON_SIZE = 36.0;
@@ -31,24 +33,16 @@ Drawer homeDrawer(BuildContext context) {
                   leading: Icon(Icons.account_circle, size: DRAWER_ICON_SIZE),
                   title: Text('I miei medici'),
                   onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.vpn_key, size: DRAWER_ICON_SIZE),
-                  title: Text('Cambia password'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(MY_DOCTORS_ROUTE);
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.exit_to_app, size: DRAWER_ICON_SIZE),
                   title: Text('Logout'),
                   onTap: () {
-                    // Update the state of the app.
-                    // ...
+                    Navigator.of(context).pop();
+                    // TODO
                   },
                 ),
               ],

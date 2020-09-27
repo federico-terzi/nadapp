@@ -11,6 +11,7 @@ import 'package:nad_app/models/meal_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/balance.dart';
+import 'models/doctor.dart';
 import 'models/user.dart';
 
 Future<AppState> initializeState(NadDatabase db) async {
@@ -39,6 +40,20 @@ Future<AppState> initializeState(NadDatabase db) async {
       Balance currentBalance = Balance.fromMap(jsonDecode(encodedCurrentBalance));
       state = state.copyWith(balance: BalanceState(
         currentBalance: currentBalance,
+      ));
+    }catch(e) {
+      print(e);
+    }
+  }
+
+  // Load "my doctors" from preferences
+  String encodedMyDoctors = prefs.getString(MY_DOCTORS_PREFERENCE);
+  if (encodedMyDoctors != null) {
+    try {
+      List jsonDoctors = json.decode(encodedMyDoctors);
+      List<Doctor> doctors = jsonDoctors.map((item) => Doctor.fromMap(item)).toList();
+      state = state.copyWith(doctor: state.doctor.copyWith(
+        doctors: doctors,
       ));
     }catch(e) {
       print(e);

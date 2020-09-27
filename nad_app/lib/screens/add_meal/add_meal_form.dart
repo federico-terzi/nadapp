@@ -15,8 +15,9 @@ import 'package:uuid/uuid.dart';
 class AddMealForm extends StatefulWidget {
   final PersistenceState persistenceState;
   final DateTime initialDate = DateTime.now();
+  final VoidCallback onScrollRequest;
 
-  AddMealForm({Key key, this.persistenceState}) : super(key: key);
+  AddMealForm({Key key, this.persistenceState, this.onScrollRequest}) : super(key: key);
 
   @override
   _AddMealFormState createState() => _AddMealFormState();
@@ -70,8 +71,11 @@ class _AddMealFormState extends State<AddMealForm> {
               }
               return null;
             },
+            onChanged: (_) {
+              widget.onScrollRequest();
+            },
             onTap: () {
-              Scrollable.ensureVisible(context);
+              widget.onScrollRequest();
             },
             onSaved: (String value) {
               meal = value;

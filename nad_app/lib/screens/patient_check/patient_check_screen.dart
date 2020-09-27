@@ -37,7 +37,10 @@ class PatientCheckScreen extends StatelessWidget {
             fontSize: 20,
             primary: false,
             onPressed: () {
-              // TODO
+              Navigator.pushNamed(
+                context,
+                USEFUL_INFORMATION_ROUTE,
+              );
             },
           ),
         ),
