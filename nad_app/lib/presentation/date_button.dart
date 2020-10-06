@@ -10,16 +10,23 @@ class DateButton extends StatelessWidget {
   DateButton({@required this.onPressed, this.date, this.includeTime = true});
 
   String renderDateTime(DateTime date) {
-    // TODO: if date is closer than 5 minutes, show "Adesso"
     var jiffy = Jiffy(date)..startOf(Units.MINUTE);
-    return "${jiffy.fromNow()} (${jiffy.format("HH:mm")})";
+    String message = jiffy.fromNow();
+    // if date is closer than 5 minutes, show "Adesso"
+    if (jiffy.isAfter(Jiffy().subtract(duration: Duration(minutes: 5)))) {
+      message = "Adesso";
+    }
+    return "$message (${jiffy.format("HH:mm")})";
   }
 
   String renderDate(DateTime date) {
-    // TODO: if date is today, output "Oggi"
-
     var jiffy = Jiffy(date)..startOf(Units.DAY);
-    return "${jiffy.fromNow()} (${jiffy.format("dd/MM/yyyy")})";
+    String message = jiffy.fromNow();
+    // if date is today, output "Oggi"
+    if (jiffy.isSame(Jiffy(), Units.DAY)) {
+      message = "Oggi";
+    }
+    return "$message (${jiffy.format("dd/MM/yyyy")})";
   }
 
   @override

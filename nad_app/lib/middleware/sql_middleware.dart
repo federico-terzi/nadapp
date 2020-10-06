@@ -22,10 +22,12 @@ Middleware<AppState> createSqlMiddleware(NadDatabase db) {
       }).catchError((error) {
         // TODO: handle failure
       });
-    } else if (action is AddBalanceRequest) {
+    } else if (action is SaveBalanceRequest) {
       balanceRepository.saveBalance(action.balance).then((_) {
-        store.dispatch(AddBalanceSuccess(balance: action.balance));
-        store.dispatch(Pop());
+        store.dispatch(SaveBalanceSuccess(balance: action.balance));
+        if (action.isSubmit) {
+          store.dispatch(Pop());
+        }
       }).catchError((error) {
         // TODO: handle failure
       });

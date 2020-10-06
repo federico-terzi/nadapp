@@ -5,22 +5,30 @@ import 'package:quiver/core.dart';
 import 'package:redux/redux.dart';
 
 Reducer<BalanceState> balanceReducer = combineReducers([
-  new TypedReducer<BalanceState, AddBalanceSuccess>(addBalanceSuccessReducer),
-  new TypedReducer<BalanceState, UpdateCurrentBalanceRequest>(updateCurrentBalanceRequestReducer),
+  new TypedReducer<BalanceState, SaveBalanceSuccess>(saveBalanceSuccessReducer),
 ]);
 
-BalanceState addBalanceSuccessReducer(BalanceState balanceState, AddBalanceSuccess action) {
-  final List<Balance> newBalances = List.from(balanceState.balances)..add(action.balance);
+BalanceState saveBalanceSuccessReducer(BalanceState balanceState, SaveBalanceSuccess action) {
+  List<Balance> newBalances = List.from(balanceState.balances);
+
+  // If the saved balance is already in the list, update it. Otherwise
+  // add it to the list
+  int index;
+  for (int i = 0; i<newBalances.length; i++) {
+    if (newBalances[i].uuid == action.balance.uuid) {
+      index = i;
+      break;
+    }
+  }
+  if (index != null) {
+    newBalances[index] = action.balance;
+  } else {
+    newBalances.add(action.balance);
+  }
+
   newBalances.sort((b1, b2) => b1.date.compareTo(b2.date));
 
   return balanceState.copyWith(
-    currentBalance: Optional.absent(),
     balances: newBalances,
-  );
-}
-
-BalanceState updateCurrentBalanceRequestReducer(BalanceState balanceState, UpdateCurrentBalanceRequest action) {
-  return balanceState.copyWith(
-    currentBalance: Optional.of(action.balance)
   );
 }

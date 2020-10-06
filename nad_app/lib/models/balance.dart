@@ -17,7 +17,6 @@ class Balance {
   final int parenteralNutritionVolume;
   final String otherIntravenousLiquids;
   final int osLiquids;
-  final int intravenousLiquidsVolume;
 
   Balance(
       {this.uuid,
@@ -34,8 +33,7 @@ class Balance {
       this.otherGastrointestinalLosses,
       this.parenteralNutritionVolume,
       this.otherIntravenousLiquids,
-      this.osLiquids,
-      this.intravenousLiquidsVolume});
+      this.osLiquids});
 
   Balance copyWith(
       {uuid,
@@ -52,8 +50,7 @@ class Balance {
       otherGastrointestinalLosses,
       parenteralNutritionVolume,
       otherIntravenousLiquids,
-      osLiquids,
-      intravenousLiquidsVolume}) {
+      osLiquids}) {
     return Balance(
       uuid: uuid ?? this.uuid,
         date: date ?? this.date,
@@ -72,9 +69,7 @@ class Balance {
             parenteralNutritionVolume ?? this.parenteralNutritionVolume,
         otherIntravenousLiquids:
             otherIntravenousLiquids ?? this.otherIntravenousLiquids,
-        osLiquids: osLiquids ?? this.osLiquids,
-        intravenousLiquidsVolume:
-            intravenousLiquidsVolume ?? this.intravenousLiquidsVolume);
+        osLiquids: osLiquids ?? this.osLiquids);
   }
 
   Balance.fromMap(Map<String, dynamic> json)
@@ -92,8 +87,7 @@ class Balance {
         otherGastrointestinalLosses = json['otherGastrointestinalLosses'],
         parenteralNutritionVolume = json['parenteralNutritionVolume'],
         otherIntravenousLiquids = json['otherIntravenousLiquids'],
-        osLiquids = json['parenteralNutritionVolume'],
-        intravenousLiquidsVolume = json['intravenousLiquidsVolume'];
+        osLiquids = json['parenteralNutritionVolume'];
 
   Map<String, dynamic> toMap() =>
       {
@@ -112,13 +106,12 @@ class Balance {
         'parenteralNutritionVolume': parenteralNutritionVolume,
         'otherIntravenousLiquids': otherIntravenousLiquids,
         'osLiquids': osLiquids,
-        'intravenousLiquidsVolume': intravenousLiquidsVolume,
       };
 
   Map<String, dynamic> toJson() => this.toMap();
 
   @override
   String toString() {
-    return 'Balance{uuid: $uuid, date: $date, minPressure: $minPressure, maxPressure: $maxPressure, heartFrequency: $heartFrequency, weight: $weight, diuresis: $diuresis, fecesCount: $fecesCount, fecesTexture: $fecesTexture, ostomyVolume: $ostomyVolume, pegVolume: $pegVolume, otherGastrointestinalLosses: $otherGastrointestinalLosses, parenteralNutritionVolume: $parenteralNutritionVolume, otherIntravenousLiquids: $otherIntravenousLiquids, osLiquids: $osLiquids, intravenousLiquidsVolume: $intravenousLiquidsVolume}';
+    return 'Balance{uuid: $uuid, date: $date, minPressure: $minPressure, maxPressure: $maxPressure, heartFrequency: $heartFrequency, weight: $weight, diuresis: $diuresis, fecesCount: $fecesCount, fecesTexture: $fecesTexture, ostomyVolume: $ostomyVolume, pegVolume: $pegVolume, otherGastrointestinalLosses: $otherGastrointestinalLosses, parenteralNutritionVolume: $parenteralNutritionVolume, otherIntravenousLiquids: $otherIntravenousLiquids, osLiquids: $osLiquids}';
   }
 }

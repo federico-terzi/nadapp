@@ -22,8 +22,10 @@ class AddBalanceForm extends StatefulWidget {
   final PersistenceState persistenceState;
   final BalanceState balanceState;
   final DateTime initialDate = DateTime.now();
+  final Balance initialBalance;
 
-  AddBalanceForm({Key key, this.persistenceState, this.balanceState})
+  AddBalanceForm(
+      {Key key, this.persistenceState, this.balanceState, this.initialBalance})
       : super(key: key);
 
   @override
@@ -39,12 +41,13 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
 
   @override
   void initState() {
-    if (widget.balanceState.currentBalance != null) {
-      balance = widget.balanceState.currentBalance;
+    if (widget.initialBalance != null) {
+      balance = widget.initialBalance;
     } else {
       var uuid = Uuid();
       balance = Balance(uuid: uuid.v4(), date: DateTime.now());
     }
+
     super.initState();
   }
 
@@ -54,7 +57,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
     });
 
     if (!alreadySubmitted) {
-      StoreProvider.of<AppState>(context).dispatch(UpdateCurrentBalanceRequest(
+      StoreProvider.of<AppState>(context).dispatch(SaveBalanceRequest(
         balance: balance,
       ));
     }
@@ -114,11 +117,6 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Data:",
-            style: Theme.of(context).textTheme.headline3,
-          ),
-          SizedBox(height: 10),
           DateButton(
             onPressed: () {
               DatePicker.showDatePicker(context,
@@ -147,21 +145,22 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
                 keyboardType: TextInputType.number,
                 labelText: 'Massima',
                 validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Massima mancante';
-                  }
-                  if (int.tryParse(value) == null) {
+                  if (value.trim().isNotEmpty && int.tryParse(value) == null) {
                     return "Numero non valido";
                   }
                   return null;
                 },
-                onUnfocused: (String value) {
-                  updateBalance(
-                      balance.copyWith(maxPressure: int.parse(value)));
+                onEditingEnded: (String value) {
+                  if (value.trim().isNotEmpty) {
+                    updateBalance(
+                        balance.copyWith(maxPressure: int.parse(value)));
+                  }
                 },
                 onSaved: (String value) {
-                  this.balance =
-                      this.balance.copyWith(maxPressure: int.parse(value));
+                  if (value.trim().isNotEmpty) {
+                    this.balance =
+                        this.balance.copyWith(maxPressure: int.parse(value));
+                  }
                 },
               )),
               Padding(
@@ -179,21 +178,22 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
                 keyboardType: TextInputType.number,
                 labelText: 'Minima',
                 validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Minima mancante';
-                  }
-                  if (int.tryParse(value) == null) {
+                  if (value.trim().isNotEmpty && int.tryParse(value) == null) {
                     return "Numero non valido";
                   }
                   return null;
                 },
-                onUnfocused: (String value) {
-                  updateBalance(
-                      balance.copyWith(minPressure: int.parse(value)));
+                onEditingEnded: (String value) {
+                  if (value.trim().isNotEmpty) {
+                    updateBalance(
+                        balance.copyWith(minPressure: int.parse(value)));
+                  }
                 },
                 onSaved: (String value) {
-                  this.balance =
-                      this.balance.copyWith(minPressure: int.parse(value));
+                  if (value.trim().isNotEmpty) {
+                    this.balance =
+                        this.balance.copyWith(minPressure: int.parse(value));
+                  }
                 },
               )),
             ],
@@ -211,19 +211,22 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             keyboardType: TextInputType.number,
             labelText: 'BPM',
             validator: (value) {
-              if (value.isEmpty) {
-                return 'Per favore, inserisci la tua frequenza cardiaca';
-              }
-              if (int.tryParse(value) == null) {
+              if (value.trim().isNotEmpty && int.tryParse(value) == null) {
                 return "Numero non valido";
               }
               return null;
             },
-            onUnfocused: (String value) {
-              updateBalance(balance.copyWith(heartFrequency: int.parse(value)));
+            onEditingEnded: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(
+                    balance.copyWith(heartFrequency: int.parse(value)));
+              }
             },
             onSaved: (String value) {
-              this.balance = balance.copyWith(heartFrequency: int.parse(value));
+              if (value.trim().isNotEmpty) {
+                this.balance =
+                    balance.copyWith(heartFrequency: int.parse(value));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -238,22 +241,23 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             keyboardType: TextInputType.number,
             labelText: 'Kg',
             validator: (value) {
-              if (value.isEmpty) {
-                return 'Per favore, inserisci il tuo peso corporeo';
-              }
               value = value.replaceAll(",", ".");
-              if (double.tryParse(value) == null) {
+              if (value.trim().isNotEmpty && double.tryParse(value) == null) {
                 return "Numero non valido";
               }
               return null;
             },
-            onUnfocused: (String value) {
-              value = value.replaceAll(",", ".");
-              updateBalance(balance.copyWith(weight: double.parse(value)));
+            onEditingEnded: (String value) {
+              if (value.trim().isNotEmpty) {
+                value = value.replaceAll(",", ".");
+                updateBalance(balance.copyWith(weight: double.parse(value)));
+              }
             },
             onSaved: (String value) {
-              value = value.replaceAll(",", ".");
-              this.balance = balance.copyWith(weight: double.parse(value));
+              if (value.trim().isNotEmpty) {
+                value = value.replaceAll(",", ".");
+                this.balance = balance.copyWith(weight: double.parse(value));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -268,19 +272,20 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             keyboardType: TextInputType.number,
             labelText: "ML/24h",
             validator: (value) {
-              if (value.isEmpty) {
-                return 'Per favore, inserisci il volume di diuresi';
-              }
-              if (int.tryParse(value) == null) {
+              if (value.trim().isNotEmpty && int.tryParse(value) == null) {
                 return "Numero non valido";
               }
               return null;
             },
-            onUnfocused: (String value) {
-              updateBalance(balance.copyWith(diuresis: int.parse(value)));
+            onEditingEnded: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(balance.copyWith(diuresis: int.parse(value)));
+              }
             },
             onSaved: (String value) {
-              this.balance = balance.copyWith(diuresis: int.parse(value));
+              if (value.trim().isNotEmpty) {
+                this.balance = balance.copyWith(diuresis: int.parse(value));
+              }
             },
           ),
           SizedBox(height: 20),
@@ -300,7 +305,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
               }
               return null;
             },
-            onUnfocused: (String value) {
+            onEditingEnded: (String value) {
               if (value.trim().isNotEmpty) {
                 updateBalance(balance.copyWith(fecesCount: int.parse(value)));
               }
@@ -374,7 +379,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
               }
               return null;
             },
-            onUnfocused: (String value) {
+            onEditingEnded: (String value) {
               if (value.trim().isNotEmpty) {
                 updateBalance(balance.copyWith(ostomyVolume: int.parse(value)));
               }
@@ -402,7 +407,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
               }
               return null;
             },
-            onUnfocused: (String value) {
+            onEditingEnded: (String value) {
               if (value.trim().isNotEmpty) {
                 updateBalance(balance.copyWith(pegVolume: int.parse(value)));
               }
@@ -428,7 +433,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             validator: (value) {
               return null;
             },
-            onUnfocused: (String value) {
+            onEditingEnded: (String value) {
               if (value.trim().isNotEmpty) {
                 updateBalance(
                     balance.copyWith(otherGastrointestinalLosses: value));
@@ -459,7 +464,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
               }
               return null;
             },
-            onUnfocused: (String value) {
+            onEditingEnded: (String value) {
               if (value.trim().isNotEmpty) {
                 updateBalance(balance.copyWith(
                     parenteralNutritionVolume: int.parse(value)));
@@ -487,7 +492,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             validator: (value) {
               return null;
             },
-            onUnfocused: (String value) {
+            onEditingEnded: (String value) {
               if (value.trim().isNotEmpty) {
                 updateBalance(balance.copyWith(otherIntravenousLiquids: value));
               }
@@ -510,49 +515,20 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
             keyboardType: TextInputType.number,
             labelText: "ML/24h",
             validator: (value) {
-              if (value.isEmpty) {
-                return 'Per favore, inserisci i liquidi per OS';
-              }
-              if (int.tryParse(value) == null) {
+              if (value.trim().isNotEmpty && int.tryParse(value) == null) {
                 return "Numero non valido";
               }
               return null;
             },
-            onUnfocused: (String value) {
-              updateBalance(balance.copyWith(osLiquids: int.parse(value)));
+            onEditingEnded: (String value) {
+              if (value.trim().isNotEmpty) {
+                updateBalance(balance.copyWith(osLiquids: int.parse(value)));
+              }
             },
             onSaved: (String value) {
-              this.balance = balance.copyWith(osLiquids: int.parse(value));
-            },
-          ),
-          SizedBox(height: 20),
-          Text(
-            "Volume liquidi endovena:",
-            style: Theme.of(context).textTheme.headline3,
-          ),
-          SizedBox(height: 10),
-          FocusTextFormField(
-            initialValue: balance.intravenousLiquidsVolume != null
-                ? balance.intravenousLiquidsVolume.toString()
-                : "",
-            keyboardType: TextInputType.number,
-            labelText: "ML/24h",
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Per favore, inserisci il volume di liquidi endovena';
+              if (value.trim().isNotEmpty) {
+                this.balance = balance.copyWith(osLiquids: int.parse(value));
               }
-              if (int.tryParse(value) == null) {
-                return "Numero non valido";
-              }
-              return null;
-            },
-            onUnfocused: (String value) {
-              updateBalance(
-                  balance.copyWith(intravenousLiquidsVolume: int.parse(value)));
-            },
-            onSaved: (String value) {
-              this.balance =
-                  balance.copyWith(intravenousLiquidsVolume: int.parse(value));
             },
           ),
           SizedBox(height: 30),
@@ -562,7 +538,7 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
               style: Theme.of(context).textTheme.bodyText2),
           SizedBox(height: 30),
           BigButton(
-            text: "Concludi bilancio",
+            text: "Salva bilancio",
             loading: this.widget.persistenceState.isSaving,
             onPressed: () {
               setState(() {
@@ -577,8 +553,9 @@ class _AddBalanceFormState extends State<AddBalanceForm> {
                   alreadySubmitted = true;
                 });
 
-                StoreProvider.of<AppState>(context).dispatch(AddBalanceRequest(
+                StoreProvider.of<AppState>(context).dispatch(SaveBalanceRequest(
                   balance: balance,
+                  isSubmit: true,
                 ));
               } else {
                 _showNotCompletedDialog();

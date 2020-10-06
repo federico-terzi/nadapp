@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:nad_app/actions/sync_actions.dart';
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/auth_state.dart';
 import 'package:nad_app/presentation/big_button.dart';
@@ -29,12 +30,13 @@ class HomeScreen extends StatelessWidget {
           image: "assets/referti.png",
           label: "I miei referti",
           onPressed: () => {
-            // TODO
-          }),
+                // TODO
+              }),
       HomeCard(
           image: "assets/informati.png",
           label: "Informati",
-          onPressed: () => {Navigator.of(context).pushNamed(USEFUL_INFORMATION_ROUTE)}),
+          onPressed: () =>
+              {Navigator.of(context).pushNamed(USEFUL_INFORMATION_ROUTE)}),
       HomeCard(
         image: "assets/centroiicb.png",
         label: "Contatta centro IICB",
@@ -51,6 +53,35 @@ class HomeScreen extends StatelessWidget {
     return spacedCards;
   }
 
+  Widget _getLogo(bool isSyncing) {
+    if (isSyncing) {
+      return FadeIn(
+        key: UniqueKey(),
+        child: Container(
+          height: 130,
+          width: 130,
+          padding: EdgeInsets.all(30),
+          child: CircularProgressIndicator(
+              value: null,
+              strokeWidth: 8,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+        ),
+      );
+    } else {
+      return FadeIn(
+          key: UniqueKey(),
+          child: Image.asset("assets/logowhite.png", height: 130));
+    }
+  }
+
+  String _getHelpText(AppState appState) {
+    if (appState.sync.isSyncing) {
+      return "sincronizzazione in corso...";
+    } else {
+      return "come posso aiutarti?";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
@@ -64,6 +95,9 @@ class HomeScreen extends StatelessWidget {
               scaffoldKey: scaffoldKey,
               delay: 200,
               gradient: true,
+              onRefresh: () async {
+                StoreProvider.of<AppState>(context).dispatch(RequestSync());
+              },
               children: [
                 SizedBox(height: 20),
                 Row(
@@ -85,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                       preferences: AnimationPreferences(
                           offset: Duration(milliseconds: 500)),
                     ),
-                    Image.asset("assets/logowhite.png", height: 130),
+                    _getLogo(appState.sync.isSyncing),
                     FadeInRight(
                       child: IconButton(
                         icon: Icon(
@@ -107,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                 Text("Buongiorno ${appState.auth.user.name},",
                     style: darkTheme.textTheme.headline1),
                 SizedBox(height: 5),
-                Text("come posso aiutarti?",
+                Text(_getHelpText(appState),
                     style: darkTheme.textTheme.headline2),
                 SizedBox(height: 30),
                 ...generateCards(context),

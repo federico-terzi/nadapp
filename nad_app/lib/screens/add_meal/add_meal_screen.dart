@@ -18,6 +18,12 @@ class AddMealScreen extends StatelessWidget {
         builder: (context, appState) {
           return AppScaffold(
               title: "Aggiungi pasto",
+              action: IconButton(
+                icon: Icon(Icons.help_outline, size: 36),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(ADD_MEAL_TIPS_ROUTE);
+                },
+              ),
               body: CustomScrollView(
                 controller: _controller,
                 slivers: [
@@ -26,14 +32,6 @@ class AddMealScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        BigInfoButton(
-                          text:
-                              "Se non ricordi come compilare il diario alimentare, clicca qui!",
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(ADD_MEAL_TIPS_ROUTE);
-                          },
-                        ),
-                        SizedBox(height: 20),
                         AddMealForm(persistenceState: appState.persistence,
                         onScrollRequest: () {
                           _controller.animateTo(

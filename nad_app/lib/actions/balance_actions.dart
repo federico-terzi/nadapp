@@ -2,39 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:nad_app/models/balance.dart';
 
 @immutable
-class AddBalanceRequest {
+class SaveBalanceRequest {
   final Balance balance;
+  final bool isSubmit;
 
-  AddBalanceRequest({@required this.balance});
+  SaveBalanceRequest({@required this.balance, this.isSubmit = false});
 
   @override
   String toString() {
-    return 'AddBalanceRequest{balance: $balance}';
+    return 'SaveBalanceRequest{balance: $balance, isSubmit: $isSubmit}';
   }
 }
 
 @immutable
-class AddBalanceSuccess {
+class SaveBalanceSuccess {
   final Balance balance;
 
-  AddBalanceSuccess({@required this.balance});
+  SaveBalanceSuccess({@required this.balance});
 
   @override
   String toString() {
-    return 'AddBalanceSuccess{balance: $balance}';
+    return 'SaveBalanceSuccess{balance: $balance}';
   }
 }
 
-//TODO: addbalancefailure
-
-@immutable
-class UpdateCurrentBalanceRequest {
-  final Balance balance;
-
-  UpdateCurrentBalanceRequest({@required this.balance});
-
-  @override
-  String toString() {
-    return 'UpdateCurrentBalanceRequest{balance: $balance}';
-  }
-}
+//TODO: savebalancefailure

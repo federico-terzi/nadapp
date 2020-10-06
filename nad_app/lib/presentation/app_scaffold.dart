@@ -6,8 +6,17 @@ class AppScaffold extends StatelessWidget {
   final bool hasBack;
   final String title;
   final Widget fab;
+  final Widget action;
 
-  AppScaffold({this.hasBack = true, this.title, this.fab, this.body});
+  AppScaffold({this.hasBack = true, this.title, this.fab, this.body, this.action});
+
+  List<Widget> _getActions() {
+    if (this.action != null) {
+      return [this.action, SizedBox(width: 10)];
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +39,7 @@ class AppScaffold extends StatelessWidget {
           fontWeight: FontWeight.bold,
         )),
         backgroundColor: Colors.transparent,
+        actions: _getActions(),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),

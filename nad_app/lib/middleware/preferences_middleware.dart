@@ -11,7 +11,6 @@ import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const USER_PREFERENCE = "USER_PREFERENCE";
-const CURRENT_BALANCE_PREFERENCE = "CURRENT_BALANCE_PREFERENCE";
 const MY_DOCTORS_PREFERENCE = "MY_DOCTORS_PREFERENCE";
 
 void preferencesMiddleware(Store<AppState> store, action, NextDispatcher next) {
@@ -19,16 +18,6 @@ void preferencesMiddleware(Store<AppState> store, action, NextDispatcher next) {
     SharedPreferences.getInstance().then((prefs) {
       String user = jsonEncode(action.user);
       prefs.setString(USER_PREFERENCE, user);
-    });
-  } else if (action is UpdateCurrentBalanceRequest) {
-    SharedPreferences.getInstance().then((prefs) {
-      String balance = jsonEncode(action.balance);
-      prefs.setString(CURRENT_BALANCE_PREFERENCE, balance);
-    });
-  } else if (action is AddBalanceSuccess) {
-    // Remove current balance from preferences
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.remove(CURRENT_BALANCE_PREFERENCE);
     });
   }
 

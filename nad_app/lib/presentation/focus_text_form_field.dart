@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:nad_app/utils/debouncer.dart';
 
 class FocusTextFormField extends StatefulWidget {
   final String initialValue;
@@ -8,14 +9,14 @@ class FocusTextFormField extends StatefulWidget {
   final int minLines;
   final int maxLines;
 
-  final void Function(String) onUnfocused;
+  final void Function(String) onEditingEnded;
   final void Function(String) onSaved;
   final String Function(String) validator;
 
 
   FocusTextFormField({this.initialValue = "", this.keyboardType = TextInputType
       .text, this.labelText, this.onSaved,
-    this.onUnfocused, this.validator, this.minLines, this.maxLines});
+    this.onEditingEnded, this.validator, this.minLines, this.maxLines});
 
   @override
   _FocusTextFormFieldState createState() => _FocusTextFormFieldState();
@@ -23,6 +24,7 @@ class FocusTextFormField extends StatefulWidget {
 
 class _FocusTextFormFieldState extends State<FocusTextFormField> {
   final controller = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 1000);
 
   bool focused = false;
   String errorText;
@@ -31,6 +33,13 @@ class _FocusTextFormFieldState extends State<FocusTextFormField> {
   void initState() {
     controller.text = widget.initialValue;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _debouncer?.cancel();
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,7 +56,7 @@ class _FocusTextFormFieldState extends State<FocusTextFormField> {
             });
 
             if (errorText == null) {
-              widget.onUnfocused?.call(controller.text);
+              widget.onEditingEnded?.call(controller.text);
             }
           }
           focused = focus;
@@ -78,16 +87,13 @@ class _FocusTextFormFieldState extends State<FocusTextFormField> {
             setState(() {
               errorText = widget.validator(newValue);
             });
+
+            // When text field changes, trigger the event
+            _debouncer.run(() => widget.onEditingEnded(newValue));
           },
           onSaved: widget.onSaved,
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }

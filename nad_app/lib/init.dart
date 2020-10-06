@@ -33,19 +33,6 @@ Future<AppState> initializeState(NadDatabase db) async {
     }
   }
 
-  // Load the current balance
-  String encodedCurrentBalance = prefs.getString(CURRENT_BALANCE_PREFERENCE);
-  if (encodedCurrentBalance != null) {
-    try {
-      Balance currentBalance = Balance.fromMap(jsonDecode(encodedCurrentBalance));
-      state = state.copyWith(balance: BalanceState(
-        currentBalance: currentBalance,
-      ));
-    }catch(e) {
-      print(e);
-    }
-  }
-
   // Load "my doctors" from preferences
   String encodedMyDoctors = prefs.getString(MY_DOCTORS_PREFERENCE);
   if (encodedMyDoctors != null) {

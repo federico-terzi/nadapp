@@ -37,11 +37,6 @@ class _AddMealFormState extends State<AddMealForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Data e ora:",
-            style: Theme.of(context).textTheme.headline3,
-          ),
-          SizedBox(height: 10),
           DateButton(onPressed: () {
             DatePicker.showDateTimePicker(context,
                 showTitleActions: true,
@@ -59,7 +54,7 @@ class _AddMealFormState extends State<AddMealForm> {
           ),
           SizedBox(height: 10),
           TextFormField(
-            minLines: 4,
+            minLines: 5,
             maxLines: null,
             keyboardType: TextInputType.multiline,
             decoration: InputDecoration(

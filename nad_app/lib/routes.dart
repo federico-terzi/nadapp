@@ -17,6 +17,8 @@ import 'package:nad_app/screens/useful_information/iicb_therapy_screen.dart';
 import 'package:nad_app/screens/useful_information/useful_information_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'models/balance.dart';
+
 const INIT_ROUTE = "/init";
 const INTRO_ROUTE = "/intro";
 const PATIENT_CHECK_ROUTE = "/patientCheck";
@@ -64,7 +66,8 @@ PageTransition<dynamic> routeFactory(RouteSettings settings) {
       return PageTransition(child: BalanceScreen(), type: PageTransitionType.rightToLeft);
       break;
     case ADD_BALANCE_ROUTE:
-      return PageTransition(child: AddBalanceScreen(), type: PageTransitionType.rightToLeft);
+      Balance balance = settings.arguments;
+      return PageTransition(child: AddBalanceScreen(balance), type: PageTransitionType.rightToLeft);
       break;
     case ADD_BALANCE_TIPS_ROUTE:
       return PageTransition(child: AddBalanceTipsScreen(), type: PageTransitionType.rightToLeft);

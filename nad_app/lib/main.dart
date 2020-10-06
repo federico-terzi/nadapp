@@ -9,6 +9,7 @@ import 'package:nad_app/middleware/logger_middleware.dart';
 import 'package:nad_app/middleware/login_middleware.dart';
 import 'package:nad_app/middleware/navigation_middleware.dart';
 import 'package:nad_app/middleware/preferences_middleware.dart';
+import 'package:nad_app/middleware/sync_middleware.dart';
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/balance.dart';
 import 'package:nad_app/models/balance_state.dart';
@@ -38,6 +39,7 @@ void main() {
         navigationMiddleware,
         createSqlMiddleware(db),
         preferencesMiddleware,
+        syncMiddleware,
       ]);
 
   runApp(NadApp(store: store));

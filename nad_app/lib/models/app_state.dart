@@ -5,6 +5,7 @@ import 'package:nad_app/models/doctor_state.dart';
 import 'package:nad_app/models/meal_state.dart';
 import 'package:nad_app/models/navigation_state.dart';
 import 'package:nad_app/models/persistence_state.dart';
+import 'package:nad_app/models/sync_state.dart';
 
 @immutable
 class AppState {
@@ -14,6 +15,7 @@ class AppState {
   final BalanceState balance;
   final DoctorState doctor;
   final PersistenceState persistence;
+  final SyncState sync;
 
   AppState(
       {AuthState auth,
@@ -21,13 +23,15 @@ class AppState {
       MealState meal,
       BalanceState balance,
       DoctorState doctor,
-      PersistenceState persistence})
+      PersistenceState persistence,
+      SyncState sync})
       : auth = auth ?? new AuthState(),
         navigation = navigation ?? new NavigationState(),
         meal = meal ?? new MealState(),
         balance = balance ?? new BalanceState(),
         doctor = doctor ?? new DoctorState(),
-        persistence = persistence ?? new PersistenceState();
+        persistence = persistence ?? new PersistenceState(),
+        sync = sync ?? new SyncState();
 
   AppState copyWith({
     AuthState auth,
@@ -36,6 +40,7 @@ class AppState {
     BalanceState balance,
     DoctorState doctor,
     PersistenceState persistence,
+    SyncState sync,
   }) {
     return new AppState(
       auth: auth ?? this.auth,
@@ -44,6 +49,7 @@ class AppState {
       balance: balance ?? this.balance,
       doctor: doctor ?? this.doctor,
       persistence: persistence ?? this.persistence,
+      sync: sync ?? this.sync,
     );
   }
 }

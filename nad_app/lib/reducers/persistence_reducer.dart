@@ -6,8 +6,8 @@ import 'package:redux/redux.dart';
 Reducer<PersistenceState> persistenceReducer = combineReducers([
   new TypedReducer<PersistenceState, AddMealRequest>(addMealRequestReducer),
   new TypedReducer<PersistenceState, AddMealSuccess>(addMealSuccessReducer),
-  new TypedReducer<PersistenceState, AddBalanceRequest>(addBalanceRequestReducer),
-  new TypedReducer<PersistenceState, AddBalanceSuccess>(addBalanceSuccessReducer),
+  new TypedReducer<PersistenceState, SaveBalanceRequest>(saveBalanceRequestReducer),
+  new TypedReducer<PersistenceState, SaveBalanceSuccess>(saveBalanceSuccessReducer),
 ]);
 
 PersistenceState addMealRequestReducer(PersistenceState navigationState, AddMealRequest action) {
@@ -22,13 +22,13 @@ PersistenceState addMealSuccessReducer(PersistenceState navigationState, AddMeal
   );
 }
 
-PersistenceState addBalanceRequestReducer(PersistenceState navigationState, AddBalanceRequest action) {
+PersistenceState saveBalanceRequestReducer(PersistenceState navigationState, SaveBalanceRequest action) {
   return navigationState.copyWith(
     isSaving: true,
   );
 }
 
-PersistenceState addBalanceSuccessReducer(PersistenceState navigationState, AddBalanceSuccess action) {
+PersistenceState saveBalanceSuccessReducer(PersistenceState navigationState, SaveBalanceSuccess action) {
   return navigationState.copyWith(
     isSaving: false,
   );

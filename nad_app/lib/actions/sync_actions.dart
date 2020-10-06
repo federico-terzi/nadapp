@@ -1,0 +1,3 @@
+class RequestSync {}
+
+class SyncSuccess {}

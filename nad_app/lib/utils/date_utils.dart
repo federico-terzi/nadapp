@@ -7,7 +7,14 @@ String getFormattedDate(DateTime date) {
 
 String getFullFormattedDate(DateTime date) {
   var jiffyDate = Jiffy(date)..startOf(Units.MINUTE);
-  return "${jiffyDate.fromNow().capitalize()} (${jiffyDate.format("dd/MM/yyyy")})";
+
+  String message = jiffyDate.fromNow().capitalize();
+  // if date is today, output "Oggi"
+  if (jiffyDate.isSame(Jiffy(), Units.DAY)) {
+    message = "Oggi";
+  }
+
+  return "$message (${jiffyDate.format("dd/MM/yyyy")})";
 }
 
 // TODO: add tests

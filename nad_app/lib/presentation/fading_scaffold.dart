@@ -9,8 +9,15 @@ class FadingScaffold extends StatelessWidget {
   final bool gradient;
   final Drawer drawer;
   final Key scaffoldKey;
+  final RefreshCallback onRefresh;
 
-  const FadingScaffold({@required this.children, this.delay = 500, this.gradient = false, this.drawer, this.scaffoldKey});
+  const FadingScaffold(
+      {@required this.children,
+      this.delay = 500,
+      this.gradient = false,
+      this.drawer,
+      this.scaffoldKey,
+      this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +28,15 @@ class FadingScaffold extends StatelessWidget {
           flex: child.flex,
           child: FadeInUp(
             child: child.child,
-            preferences:
-            AnimationPreferences(offset: Duration(milliseconds: delay * index)),
+            preferences: AnimationPreferences(
+                offset: Duration(milliseconds: delay * index)),
           ),
         ));
       } else {
         children.add(FadeInUp(
           child: child,
-          preferences:
-          AnimationPreferences(offset: Duration(milliseconds: delay * index)),
+          preferences: AnimationPreferences(
+              offset: Duration(milliseconds: delay * index)),
         ));
       }
     });
@@ -49,6 +56,10 @@ class FadingScaffold extends StatelessWidget {
         ),
       ],
     );
+
+    if (onRefresh != null) {
+      child = RefreshIndicator(onRefresh: onRefresh, child: child);
+    }
 
     // Wrap child inside container to apply gradient
     if (gradient) {
