@@ -38,6 +38,32 @@ class LoginScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _showErrorDialog(BuildContext context, String message) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Errore'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(message)
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Riprova"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AuthState>(
@@ -62,6 +88,11 @@ class LoginScreen extends StatelessWidget {
             _getHelpButton(authState),
           ],
         );
+      },
+      onDidChange: (authState) {
+        if (authState.error != null) {
+          _showErrorDialog(context, authState.error);
+        }
       },
     );
   }

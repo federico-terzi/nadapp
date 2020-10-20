@@ -86,7 +86,7 @@ class ContactScreen extends StatelessWidget {
                     "assets/centroiicb.png",
                     height: 140,
                   )),
-                  ...getPatientContent(authState.user != null),
+                  ...getPatientContent(authState.sessionToken != null),
                   BigIconButton(
                       fontSize: 25,
                       text: "segiicb@aosp.bo.it",

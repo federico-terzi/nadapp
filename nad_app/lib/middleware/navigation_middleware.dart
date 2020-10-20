@@ -15,7 +15,7 @@ void navigationMiddleware(Store<AppState> store, action, NextDispatcher next) {
   } else if (action is Pop) {
     navigatorKey.currentState.pop();
   } else if (action is AppInitialized) {
-    if (action.state.auth.user != null) {
+    if (action.state.auth.sessionToken != null) {
       // User is logged in, show the main screen
       store.dispatch(PushNamed(route: HOME_ROUTE, reset: true));
 

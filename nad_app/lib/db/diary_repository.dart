@@ -20,11 +20,20 @@ class DiaryRepository {
     });
   }
 
-  Future<List<Meal>> getUnsyncedMeals() async {
+  Future<void> cleanMeals() async {
     var db = await this.db.get();
-    final List<Map<String, dynamic>> maps = await db.query('diary', where: 'dirty = 1', orderBy: "date ASC");
-    return List.generate(maps.length, (i) {
-      return Meal.fromMap(maps[i]);
+    await db.rawQuery("update diary set dirty=0");
+  }
+
+  Future<void> overrideMeals(List<Meal> meals) async {
+    var db = await this.db.get();
+
+    Batch batch = db.batch();
+    batch.rawQuery("delete from diary");
+    batch.rawQuery("delete from SQLITE_SEQUENCE WHERE name='diary'");
+    meals.forEach((meal) {
+      batch.insert("diary", meal.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
     });
+    await batch.commit();
   }
 }

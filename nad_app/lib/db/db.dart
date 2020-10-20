@@ -9,7 +9,7 @@ const MIGRATIONS = [
     "uuid"	TEXT NOT NULL UNIQUE,
     "date"	INTEGER NOT NULL,
     "meal"	TEXT NOT NULL,
-    "dirty"	INTEGER NOT NULL DEFAULT 1
+    "dirty"	INTEGER NOT NULL DEFAULT 0
   );
   ''',
   '''
@@ -30,7 +30,7 @@ const MIGRATIONS = [
     "parenteralNutritionVolume"	INTEGER,
     "otherIntravenousLiquids"	TEXT,
     "osLiquids"	INTEGER,
-    "dirty"	INTEGER NOT NULL DEFAULT 1
+    "dirty"	INTEGER NOT NULL DEFAULT 0
   );
   ''',
 ];

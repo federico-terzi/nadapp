@@ -138,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20),
-                Text("Buongiorno ${appState.auth.user.name},",
+                Text("Buongiorno,",
                     style: darkTheme.textTheme.headline1),
                 SizedBox(height: 5),
                 Text(_getHelpText(appState),

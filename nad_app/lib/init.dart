@@ -8,6 +8,7 @@ import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/auth_state.dart';
 import 'package:nad_app/models/balance_state.dart';
 import 'package:nad_app/models/meal_state.dart';
+import 'package:nad_app/utils/pref_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/balance.dart';
@@ -19,6 +20,7 @@ Future<AppState> initializeState(NadDatabase db) async {
   AppState state = AppState();
 
   // Load the user if already logged in
+  /* TODO
   String encodedUser = prefs.getString(USER_PREFERENCE);
   if (encodedUser != null) {
     try {
@@ -27,6 +29,20 @@ Future<AppState> initializeState(NadDatabase db) async {
         isPhaseOneCompleted: true,
         isLoading: false,
         user: user,
+      ));
+    }catch(e) {
+      print(e);
+    }
+  }
+   */
+  // Load the token if already logged in
+  String sessionToken = await getToken();
+  if (sessionToken != null) {
+    try {
+      state = state.copyWith(auth: AuthState(
+        isPhaseOneCompleted: true,
+        isLoading: false,
+        sessionToken: sessionToken,
       ));
     }catch(e) {
       print(e);

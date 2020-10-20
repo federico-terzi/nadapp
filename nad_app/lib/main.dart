@@ -19,6 +19,7 @@ import 'package:nad_app/theme/style.dart';
 import 'package:redux/redux.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'actions/sync_actions.dart';
 import 'middleware/sql_middleware.dart';
 import 'models/meal.dart';
 import 'routes.dart';
@@ -45,7 +46,13 @@ void main() {
   runApp(NadApp(store: store));
 
   // Load the initial state at startup
-  initializeState(db).then((state) => store.dispatch(AppInitialized(state: state)));
+  initializeState(db).then((state) {
+    store.dispatch(AppInitialized(state: state));
+
+    if (state.auth.sessionToken != null) {
+      store.dispatch(RequestSync());
+    }
+  });
 }
 
 class NadApp extends StatelessWidget {

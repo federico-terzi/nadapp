@@ -19,4 +19,21 @@ class BalanceRepository {
       return Balance.fromMap(maps[i]);
     });
   }
+
+  Future<void> cleanBalances() async {
+    var db = await this.db.get();
+    await db.rawQuery("update balances set dirty=0");
+  }
+
+  Future<void> overrideBalances(List<Balance> balances) async {
+    var db = await this.db.get();
+
+    Batch batch = db.batch();
+    batch.rawQuery("delete from balances");
+    batch.rawQuery("delete from SQLITE_SEQUENCE WHERE name='balances'");
+    balances.forEach((balance) {
+      batch.insert("balances", balance.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+    await batch.commit();
+  }
 }

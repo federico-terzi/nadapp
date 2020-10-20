@@ -1,39 +1,40 @@
 import 'package:meta/meta.dart';
 
 import 'package:nad_app/models/user.dart';
+import 'package:nad_app/utils/state_utils.dart';
+import 'package:quiver/core.dart';
 
 @immutable
 class AuthState {
-  final User user;
-  //final String refreshToken;
-  //final String sessionToken;
+  final String verificationToken;
+  final String sessionToken;
 
-  //final String phaseOneToken;
   final bool isPhaseOneCompleted;
   final bool isLoading;
   final String error;
 
   AuthState({
-    //this.refreshToken,
-    //this.sessionToken,
-    //this.phaseOneToken,
+    this.verificationToken,
+    this.sessionToken,
     this.isPhaseOneCompleted = false,
     this.isLoading = false,
-    this.user,
     this.error,
   });
 
   AuthState copyWith({
     bool isPhaseOneCompleted,
     bool isLoading,
-    String error,
-    User user
+    Optional<String> error,
+    User user,
+    Optional<String> verificationToken,
+    Optional<String> sessionToken,
   }) {
     return new AuthState(
       isPhaseOneCompleted: isPhaseOneCompleted ?? this.isPhaseOneCompleted,
       isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
-      user: user ?? this.user,
+      error: reduceState(error, this.error),
+      verificationToken: reduceState(verificationToken, this.verificationToken),
+      sessionToken: reduceState(sessionToken, this.sessionToken),
     );
   }
 }

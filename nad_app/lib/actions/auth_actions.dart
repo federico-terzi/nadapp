@@ -1,4 +1,3 @@
-import 'package:nad_app/models/user.dart';
 
 class LoginRequest {
   final String username;
@@ -14,13 +13,21 @@ class LoginRequest {
 }
 
 class LoginPhaseOneSuccess {
-  // TODO: this will contain the verification token
+  final String verificationToken;
+
+  LoginPhaseOneSuccess({this.verificationToken});
+
+  @override
+  String toString() {
+    return 'LoginPhaseOneSuccess{verificationToken: $verificationToken}';
+  }
 }
 
 class LoginPhaseOneFailed {
+  final String message;
   final Exception error;
 
-  LoginPhaseOneFailed({this.error});
+  LoginPhaseOneFailed({this.message, this.error});
 }
 
 class VerifyRequest {
@@ -36,12 +43,19 @@ class VerifyRequest {
 }
 
 class LoginPhaseTwoSuccess {
-  final User user;
+  final String token;
 
-  LoginPhaseTwoSuccess({this.user});
+  LoginPhaseTwoSuccess({this.token});
 
   @override
   String toString() {
-    return 'LoginPhaseTwoSuccess{user: $user}';
+    return 'LoginPhaseTwoSuccess{token: $token}';
   }
+}
+
+class LoginPhaseTwoFailed {
+  final String message;
+  final Exception error;
+
+  LoginPhaseTwoFailed({this.message, this.error});
 }

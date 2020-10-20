@@ -18,6 +18,8 @@ class Balance {
   final String otherIntravenousLiquids;
   final int osLiquids;
 
+  final int dirty;
+
   Balance(
       {this.uuid,
         this.date,
@@ -33,7 +35,8 @@ class Balance {
       this.otherGastrointestinalLosses,
       this.parenteralNutritionVolume,
       this.otherIntravenousLiquids,
-      this.osLiquids});
+      this.osLiquids,
+      this.dirty = 0});
 
   Balance copyWith(
       {uuid,
@@ -50,7 +53,8 @@ class Balance {
       otherGastrointestinalLosses,
       parenteralNutritionVolume,
       otherIntravenousLiquids,
-      osLiquids}) {
+      osLiquids,
+      dirty}) {
     return Balance(
       uuid: uuid ?? this.uuid,
         date: date ?? this.date,
@@ -69,30 +73,57 @@ class Balance {
             parenteralNutritionVolume ?? this.parenteralNutritionVolume,
         otherIntravenousLiquids:
             otherIntravenousLiquids ?? this.otherIntravenousLiquids,
-        osLiquids: osLiquids ?? this.osLiquids);
+        osLiquids: osLiquids ?? this.osLiquids,
+        dirty: dirty ?? this.dirty,
+    );
   }
 
-  Balance.fromMap(Map<String, dynamic> json)
-      : uuid = json['uuid'],
-        date = DateTime.fromMillisecondsSinceEpoch(json['date']),
-        minPressure = json['minPressure'],
-        maxPressure = json['maxPressure'],
-        heartFrequency = json['heartFrequency'],
-        weight = json['weight'],
-        diuresis = json['diuresis'],
-        fecesCount = json['fecesCount'],
-        fecesTexture = json['fecesTexture'],
-        ostomyVolume = json['ostomyVolume'],
-        pegVolume = json['pegVolume'],
-        otherGastrointestinalLosses = json['otherGastrointestinalLosses'],
-        parenteralNutritionVolume = json['parenteralNutritionVolume'],
-        otherIntravenousLiquids = json['otherIntravenousLiquids'],
-        osLiquids = json['parenteralNutritionVolume'];
+  Balance.fromMap(Map<String, dynamic> map)
+      : uuid = map['uuid'],
+        date = DateTime.parse(map['date']),
+        minPressure = map['minPressure'],
+        maxPressure = map['maxPressure'],
+        heartFrequency = map['heartFrequency'],
+        weight = map['weight']?.toDouble(),
+        diuresis = map['diuresis'],
+        fecesCount = map['fecesCount'],
+        fecesTexture = map['fecesTexture'],
+        ostomyVolume = map['ostomyVolume'],
+        pegVolume = map['pegVolume'],
+        otherGastrointestinalLosses = map['otherGastrointestinalLosses'],
+        parenteralNutritionVolume = map['parenteralNutritionVolume'],
+        otherIntravenousLiquids = map['otherIntravenousLiquids'],
+        osLiquids = map['parenteralNutritionVolume'],
+        dirty = map['dirty'] ?? 0;
+
+  Map<String, dynamic> toJson()
+  {
+    var map = {
+      'uuid': uuid,
+      'date': date.toIso8601String(),
+      'minPressure': minPressure,
+      'maxPressure': maxPressure,
+      'heartFrequency': heartFrequency,
+      'weight': weight,
+      'diuresis': diuresis,
+      'fecesCount': fecesCount,
+      'fecesTexture': fecesTexture,
+      'ostomyVolume': ostomyVolume,
+      'pegVolume': pegVolume,
+      'otherGastrointestinalLosses': otherGastrointestinalLosses,
+      'parenteralNutritionVolume': parenteralNutritionVolume,
+      'otherIntravenousLiquids': otherIntravenousLiquids,
+      'osLiquids': osLiquids,
+    };
+    map.removeWhere((key, value) => value == null);
+    return map;
+  }
+
 
   Map<String, dynamic> toMap() =>
       {
         'uuid': uuid,
-        'date': date.millisecondsSinceEpoch,
+        'date': date.toIso8601String(),
         'minPressure': minPressure,
         'maxPressure': maxPressure,
         'heartFrequency': heartFrequency,
@@ -106,12 +137,11 @@ class Balance {
         'parenteralNutritionVolume': parenteralNutritionVolume,
         'otherIntravenousLiquids': otherIntravenousLiquids,
         'osLiquids': osLiquids,
+        'dirty': dirty,
       };
-
-  Map<String, dynamic> toJson() => this.toMap();
 
   @override
   String toString() {
-    return 'Balance{uuid: $uuid, date: $date, minPressure: $minPressure, maxPressure: $maxPressure, heartFrequency: $heartFrequency, weight: $weight, diuresis: $diuresis, fecesCount: $fecesCount, fecesTexture: $fecesTexture, ostomyVolume: $ostomyVolume, pegVolume: $pegVolume, otherGastrointestinalLosses: $otherGastrointestinalLosses, parenteralNutritionVolume: $parenteralNutritionVolume, otherIntravenousLiquids: $otherIntravenousLiquids, osLiquids: $osLiquids}';
+    return 'Balance{uuid: $uuid, date: $date, minPressure: $minPressure, maxPressure: $maxPressure, heartFrequency: $heartFrequency, weight: $weight, diuresis: $diuresis, fecesCount: $fecesCount, fecesTexture: $fecesTexture, ostomyVolume: $ostomyVolume, pegVolume: $pegVolume, otherGastrointestinalLosses: $otherGastrointestinalLosses, parenteralNutritionVolume: $parenteralNutritionVolume, otherIntravenousLiquids: $otherIntravenousLiquids, osLiquids: $osLiquids, dirty: $dirty}';
   }
 }
