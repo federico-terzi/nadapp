@@ -89,8 +89,8 @@ class LoginScreen extends StatelessWidget {
           ],
         );
       },
-      onDidChange: (authState) {
-        if (authState.error != null) {
+      onWillChange: (previousAuthState, authState) {
+        if (previousAuthState.error == null && authState.error != null) {
           _showErrorDialog(context, authState.error);
         }
       },

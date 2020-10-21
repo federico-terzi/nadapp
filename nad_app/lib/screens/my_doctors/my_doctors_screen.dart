@@ -24,15 +24,11 @@ class MyDoctorsScreen extends StatelessWidget {
                   child: ListTile(
                     title: Text(doctor.name,
                         style: Theme.of(context).textTheme.headline3),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Text(doctor.summary,
-                          style: Theme.of(context).textTheme.bodyText1),
                     ),
                   ),
                 ),
               ),
-            ))
+            )
         .toList();
   }
 

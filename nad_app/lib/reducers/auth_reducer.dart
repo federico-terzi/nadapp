@@ -12,6 +12,9 @@ Reducer<AuthState> authReducer = combineReducers([
   new TypedReducer<AuthState, LoginPhaseTwoSuccess>(
       loginPhaseTwoSuccessReducer),
   new TypedReducer<AuthState, LoginPhaseTwoFailed>(loginPhaseTwoFailedReducer),
+  new TypedReducer<AuthState, LogoutRequest>(logoutRequestReducer),
+  new TypedReducer<AuthState, LogoutDBCleared>(logoutDBClearedReducer),
+  new TypedReducer<AuthState, LogoutPreferencesCleared>(logoutPreferencesClearedReducer),
 ]);
 
 AuthState loginRequestReducer(AuthState auth, LoginRequest action) {
@@ -61,5 +64,28 @@ AuthState loginPhaseTwoFailedReducer(
     isLoading: false,
     error: Optional.of(action.message),
     isPhaseOneCompleted: false,
+  );
+}
+
+AuthState logoutRequestReducer(
+    AuthState auth, LogoutRequest action) {
+  return auth.copyWith(
+    isLoading: true,
+    logoutPreferenceCleared: false,
+    logoutDBCleared: false,
+  );
+}
+
+AuthState logoutDBClearedReducer(
+    AuthState auth, LogoutDBCleared action) {
+  return auth.copyWith(
+    logoutDBCleared: true,
+  );
+}
+
+AuthState logoutPreferencesClearedReducer(
+    AuthState auth, LogoutPreferencesCleared action) {
+  return auth.copyWith(
+    logoutPreferenceCleared: true,
   );
 }

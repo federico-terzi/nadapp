@@ -36,4 +36,9 @@ class BalanceRepository {
     });
     await batch.commit();
   }
+
+  Future<void> deleteAllBalances() async {
+    var db = await this.db.get();
+    await db.rawQuery("delete from balances");
+  }
 }

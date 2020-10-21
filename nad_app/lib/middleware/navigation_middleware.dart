@@ -1,4 +1,5 @@
 import 'package:nad_app/actions/app_actions.dart';
+import 'package:nad_app/actions/auth_actions.dart';
 import 'package:nad_app/actions/navigation_actions.dart';
 import 'package:nad_app/main.dart';
 import 'package:nad_app/models/app_state.dart';
@@ -24,6 +25,10 @@ void navigationMiddleware(Store<AppState> store, action, NextDispatcher next) {
       // User is not logged in, show the intro
       store.dispatch(PushNamed(route: INTRO_ROUTE, reset: true));
     }
+  } else if (action is LogoutRequest) {
+    store.dispatch(PushNamed(route: INIT_ROUTE, reset: true));
+  } else if (action is LogoutSuccess) {
+    store.dispatch(PushNamed(route: INTRO_ROUTE, reset: true));
   }
 
   next(action);

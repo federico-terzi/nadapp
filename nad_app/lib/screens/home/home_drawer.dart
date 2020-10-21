@@ -5,7 +5,7 @@ import 'package:nad_app/theme/style.dart';
 
 const DRAWER_ICON_SIZE = 36.0;
 
-Drawer homeDrawer(BuildContext context) {
+Drawer homeDrawer(BuildContext context, {VoidCallback onLogout}) {
   return Drawer(
     child: Theme(
       data: Theme.of(context).copyWith(textTheme: appTheme().textTheme),
@@ -42,7 +42,7 @@ Drawer homeDrawer(BuildContext context) {
                   title: Text('Logout'),
                   onTap: () {
                     Navigator.of(context).pop();
-                    // TODO
+                    onLogout();
                   },
                 ),
               ],

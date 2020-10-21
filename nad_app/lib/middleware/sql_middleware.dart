@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:nad_app/actions/auth_actions.dart';
 import 'package:nad_app/actions/balance_actions.dart';
 import 'package:nad_app/actions/meal_actions.dart';
 import 'package:nad_app/actions/navigation_actions.dart';
@@ -25,6 +26,11 @@ Future<void> _processSyncResponse(SyncResponse sync, DiaryRepository diaryReposi
 Future<void> _cleanDirtyEntries(DiaryRepository diaryRepository, BalanceRepository balanceRepository) async {
   await diaryRepository.cleanMeals();
   await balanceRepository.cleanBalances();
+}
+
+Future<void> _deleteAllEntries(DiaryRepository diaryRepository, BalanceRepository balanceRepository) async {
+  await diaryRepository.deleteAllMeals();
+  await balanceRepository.deleteAllBalances();
 }
 
 Middleware<AppState> createSqlMiddleware(NadDatabase db) {
@@ -57,6 +63,11 @@ Middleware<AppState> createSqlMiddleware(NadDatabase db) {
         store.dispatch(PartialSyncUpdated());
       }).catchError((err) {
         // TODO
+      });
+    } else if (action is LogoutRequest) {
+      _deleteAllEntries(diaryRepository, balanceRepository).then((_) {
+        store.dispatch(LogoutDBCleared());
+        store.dispatch(LogoutStatusUpdated());
       });
     } else if (action is SyncSuccess) {
       _cleanDirtyEntries(diaryRepository, balanceRepository);

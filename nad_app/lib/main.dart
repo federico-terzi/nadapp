@@ -50,7 +50,9 @@ void main() {
     store.dispatch(AppInitialized(state: state));
 
     if (state.auth.sessionToken != null) {
-      store.dispatch(RequestSync());
+      Future.delayed(const Duration(seconds: 1), () {
+        store.dispatch(RequestSync());
+      });
     }
   });
 }

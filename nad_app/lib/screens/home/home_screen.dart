@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:nad_app/actions/auth_actions.dart';
 import 'package:nad_app/actions/sync_actions.dart';
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/auth_state.dart';
@@ -146,8 +147,18 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 30),
                 ...generateCards(context),
               ],
-              drawer: homeDrawer(context),
+              drawer: homeDrawer(context,
+                onLogout: () {
+                  StoreProvider.of<AppState>(context).dispatch(LogoutRequest());
+                }
+              ),
             ));
+      },
+      onWillChange: (previousState, state) {
+        if (previousState.sync.error == null && state.sync.error != null) {
+          final snackBar = SnackBar(content: Text(state.sync.error));
+          scaffoldKey.currentState.showSnackBar(snackBar);
+        }
       },
     );
   }

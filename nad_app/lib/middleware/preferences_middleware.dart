@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nad_app/models/doctor.dart';
 
 Future<void> _processSyncResponse(SyncResponse sync) async {
-  // TODO: save doctors
+  await setDoctors(sync.doctors);
   await setLastServerEdit(sync.lastServerEdit);
 }
 
@@ -28,6 +28,11 @@ void preferencesMiddleware(Store<AppState> store, action, NextDispatcher next) {
       store.dispatch(PartialSyncUpdated());
     }).catchError((err) {
       // TODO
+    });
+  } else if (action is LogoutRequest) {
+    clearPreferences().then((_) {
+      store.dispatch(LogoutPreferencesCleared());
+      store.dispatch(LogoutStatusUpdated());
     });
   }
 

@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 Future<SyncResponse> _requestSync(AppState state, String sessionToken) async {
   int lastServerEdit = await getLastServerEdit();
 
+
   Map<String, dynamic> body = Map();
   body["lastServerEdit"] = lastServerEdit;
 
@@ -37,7 +38,8 @@ Future<SyncResponse> _requestSync(AppState state, String sessionToken) async {
         'Content-Type': 'application/json; charset=UTF-8',
         "Authorization": "Bearer $sessionToken",
       },
-      body: jsonEncode(body));
+      body: jsonEncode(body))
+      .timeout(const Duration(seconds: 5));
   print("server response ${res.body}");
   SyncResponse syncResponse = SyncResponse.fromJson(jsonDecode(res.body));
   return syncResponse;
@@ -53,16 +55,18 @@ List<Meal> getDirtyMeals(AppState state) {
 
 void syncMiddleware(Store<AppState> store, action, NextDispatcher next) {
   if (action is RequestSync) {
-    _requestSync(store.state, store.state.auth.sessionToken).then((syncResponse) {
-      if (syncResponse.inSync) {
-        store.dispatch(SyncSuccess());
-      } else {
-        store.dispatch(SyncResponseReceived(response: syncResponse));
-      }
-    }).catchError((err) {
-      print("requestSync error $err");
-      // TODO
-    });
+    if (!store.state.sync.isSyncing) {
+      _requestSync(store.state, store.state.auth.sessionToken).then((syncResponse) {
+        if (syncResponse.inSync) {
+          store.dispatch(SyncSuccess());
+        } else {
+          store.dispatch(SyncResponseReceived(response: syncResponse));
+        }
+      }).catchError((err) {
+        print("requestSync error $err");
+        store.dispatch(SyncError(error: "Impossible completare la sincronizzazione, riprova più tardi"));
+      });
+    }
   } else if (action is PartialSyncUpdated) {
     if (store.state.sync.isPrefSynced && store.state.sync.isDBSynced) {
       // All the intermediate modules are completed, trigger the success action

@@ -13,12 +13,17 @@ class AuthState {
   final bool isLoading;
   final String error;
 
+  final bool logoutPreferenceCleared;
+  final bool logoutDBCleared;
+
   AuthState({
     this.verificationToken,
     this.sessionToken,
     this.isPhaseOneCompleted = false,
     this.isLoading = false,
     this.error,
+    this.logoutDBCleared = false,
+    this.logoutPreferenceCleared = false,
   });
 
   AuthState copyWith({
@@ -28,6 +33,8 @@ class AuthState {
     User user,
     Optional<String> verificationToken,
     Optional<String> sessionToken,
+    bool logoutDBCleared,
+    bool logoutPreferenceCleared,
   }) {
     return new AuthState(
       isPhaseOneCompleted: isPhaseOneCompleted ?? this.isPhaseOneCompleted,
@@ -35,6 +42,8 @@ class AuthState {
       error: reduceState(error, this.error),
       verificationToken: reduceState(verificationToken, this.verificationToken),
       sessionToken: reduceState(sessionToken, this.sessionToken),
+      logoutDBCleared: logoutDBCleared ?? this.logoutDBCleared,
+      logoutPreferenceCleared: logoutPreferenceCleared ?? this.logoutPreferenceCleared,
     );
   }
 }

@@ -21,3 +21,13 @@ class PreferencesSyncCompleted {}
 class PartialSyncUpdated {}
 
 class SyncSuccess {}
+class SyncError {
+  final String error;
+
+  SyncError({this.error});
+
+  @override
+  String toString() {
+    return 'SyncError{error: $error}';
+  }
+}

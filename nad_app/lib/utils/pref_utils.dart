@@ -51,3 +51,8 @@ Future<String> getToken() async {
   var instance = await SharedPreferences.getInstance();
   return instance.getString(TOKEN_PREFERENCE);
 }
+
+Future<void> clearPreferences() async {
+  var instance = await SharedPreferences.getInstance();
+  instance.clear();
+}

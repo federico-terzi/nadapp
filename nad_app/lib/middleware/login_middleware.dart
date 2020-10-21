@@ -97,6 +97,10 @@ void loginMiddleware(Store<AppState> store, action, NextDispatcher next) {
       store.dispatch(
           LoginPhaseTwoFailed(message: message, error: error));
     });
+  } else if (action is LogoutStatusUpdated) {
+    if (store.state.auth.logoutPreferenceCleared && store.state.auth.logoutDBCleared) {
+      store.dispatch(LogoutSuccess());
+    }
   }
 
   next(action);

@@ -19,22 +19,6 @@ Future<AppState> initializeState(NadDatabase db) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   AppState state = AppState();
 
-  // Load the user if already logged in
-  /* TODO
-  String encodedUser = prefs.getString(USER_PREFERENCE);
-  if (encodedUser != null) {
-    try {
-      User user = User.fromJson(jsonDecode(encodedUser));
-      state = state.copyWith(auth: AuthState(
-        isPhaseOneCompleted: true,
-        isLoading: false,
-        user: user,
-      ));
-    }catch(e) {
-      print(e);
-    }
-  }
-   */
   // Load the token if already logged in
   String sessionToken = await getToken();
   if (sessionToken != null) {
@@ -50,13 +34,11 @@ Future<AppState> initializeState(NadDatabase db) async {
   }
 
   // Load "my doctors" from preferences
-  String encodedMyDoctors = prefs.getString(MY_DOCTORS_PREFERENCE);
-  if (encodedMyDoctors != null) {
+  List<Doctor> myDoctors = await getDoctors();
+  if (myDoctors != null) {
     try {
-      List jsonDoctors = json.decode(encodedMyDoctors);
-      List<Doctor> doctors = jsonDoctors.map((item) => Doctor.fromMap(item)).toList();
       state = state.copyWith(doctor: state.doctor.copyWith(
-        doctors: doctors,
+        doctors: myDoctors,
       ));
     }catch(e) {
       print(e);

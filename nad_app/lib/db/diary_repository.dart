@@ -36,4 +36,9 @@ class DiaryRepository {
     });
     await batch.commit();
   }
+
+  Future<void> deleteAllMeals() async {
+    var db = await this.db.get();
+    await db.rawQuery("delete from diary");
+  }
 }

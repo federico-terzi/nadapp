@@ -7,8 +7,7 @@ class LoginRequest {
 
   @override
   String toString() {
-    // TODO: remove sensitive data
-    return 'LoginRequest{username: $username, password: $password}';
+    return 'LoginRequest{username: $username}';
   }
 }
 
@@ -37,7 +36,6 @@ class VerifyRequest {
 
   @override
   String toString() {
-    // TODO: remove sensitive data
     return 'VerifyRequest{code: $code}';
   }
 }
@@ -59,3 +57,10 @@ class LoginPhaseTwoFailed {
 
   LoginPhaseTwoFailed({this.message, this.error});
 }
+
+class LogoutRequest {}
+class LogoutSuccess {}
+
+class LogoutStatusUpdated {}
+class LogoutDBCleared {}
+class LogoutPreferencesCleared {}
