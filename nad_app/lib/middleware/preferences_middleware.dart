@@ -16,6 +16,7 @@ import 'package:nad_app/models/doctor.dart';
 
 Future<void> _processSyncResponse(SyncResponse sync) async {
   await setDoctors(sync.doctors);
+  await setReports(sync.reports);
   await setLastServerEdit(sync.lastServerEdit);
 }
 

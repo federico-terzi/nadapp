@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/balance.dart';
 import 'models/doctor.dart';
+import 'models/report.dart';
 import 'models/user.dart';
 
 Future<AppState> initializeState(NadDatabase db) async {
@@ -39,6 +40,18 @@ Future<AppState> initializeState(NadDatabase db) async {
     try {
       state = state.copyWith(doctor: state.doctor.copyWith(
         doctors: myDoctors,
+      ));
+    }catch(e) {
+      print(e);
+    }
+  }
+
+  // Load reports from preferences
+  List<Report> reports = await getReports();
+  if (reports != null) {
+    try {
+      state = state.copyWith(report: state.report.copyWith(
+        reports: reports,
       ));
     }catch(e) {
       print(e);

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:nad_app/actions/auth_actions.dart';
 import 'package:nad_app/actions/navigation_actions.dart';
+import 'package:nad_app/actions/sync_actions.dart';
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/user.dart';
 import 'package:nad_app/routes.dart';
@@ -73,6 +74,7 @@ void loginMiddleware(Store<AppState> store, action, NextDispatcher next) {
           store.dispatch(
               LoginPhaseTwoSuccess(token: sessionToken));
           store.dispatch(PushNamed(route: HOME_ROUTE, reset: true));
+          store.dispatch(RequestSync());
         } else {
           store.dispatch(
               LoginPhaseTwoFailed(message: "Errore lato server"));

@@ -6,6 +6,7 @@ import 'package:nad_app/reducers/balance_reducer.dart';
 import 'package:nad_app/reducers/doctor_reducer.dart';
 import 'package:nad_app/reducers/meal_reducer.dart';
 import 'package:nad_app/reducers/persistence_reducer.dart';
+import 'package:nad_app/reducers/report_reducer.dart';
 import 'package:nad_app/reducers/sync_reducer.dart';
 
 import 'navigation_reducer.dart';
@@ -24,6 +25,7 @@ AppState rootReducer(AppState state, action) {
     balance: balanceReducer(state.balance, action),
     persistence: persistenceReducer(state.persistence, action),
     doctor: doctorReducer(state.doctor, action),
+    report: reportReducer(state.report, action),
     sync: syncReducer(state.sync, action),
   );
 }

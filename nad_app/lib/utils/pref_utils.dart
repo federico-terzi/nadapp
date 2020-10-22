@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:nad_app/models/doctor.dart';
+import 'package:nad_app/models/report.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const TOKEN_PREFERENCE = "TOKEN_PREFERENCE";
 const MY_DOCTORS_PREFERENCE = "MY_DOCTORS_PREFERENCE";
+const REPORTS_PREFERENCE = "REPORTS_PREFERENCE";
 const LAST_SERVER_EDIT_PREFERENCE = "LAST_SERVER_EDIT_PREFERENCE";
 
 Future<int> getLastServerEdit() async {
@@ -55,4 +57,25 @@ Future<String> getToken() async {
 Future<void> clearPreferences() async {
   var instance = await SharedPreferences.getInstance();
   instance.clear();
+}
+
+Future<List<Report>> getReports() async {
+  var instance = await SharedPreferences.getInstance();
+  List<Report> reports = new List();
+  if (instance.containsKey(REPORTS_PREFERENCE)) {
+    try {
+      String encodedReports = instance.getString(REPORTS_PREFERENCE);
+      List<dynamic> jsonReports = jsonDecode(encodedReports);
+      reports.addAll(jsonReports.map((report) => Report.fromMap(report)).toList());
+    } catch (err) {
+      print("getReports error $err");
+    }
+  }
+  return reports;
+}
+
+Future<void> setReports(List<Report> reports) async {
+  var instance = await SharedPreferences.getInstance();
+  var encodedReports = jsonEncode(reports.map((report) => report.toJson()).toList());
+  instance.setString(REPORTS_PREFERENCE, encodedReports);
 }

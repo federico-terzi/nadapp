@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:nad_app/actions/auth_actions.dart';
 import 'package:nad_app/actions/navigation_actions.dart';
+import 'package:nad_app/actions/report_actions.dart';
 import 'package:nad_app/actions/sync_actions.dart';
 import 'package:nad_app/models/app_state.dart';
 import 'package:nad_app/models/balance.dart';
@@ -13,6 +16,7 @@ import 'package:nad_app/models/user.dart';
 import 'package:nad_app/routes.dart';
 import 'package:nad_app/server_config.dart';
 import 'package:nad_app/utils/pref_utils.dart';
+import 'package:open_file/open_file.dart';
 import 'package:redux/redux.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,11 +27,11 @@ Future<SyncResponse> _requestSync(AppState state, String sessionToken) async {
   Map<String, dynamic> body = Map();
   body["lastServerEdit"] = lastServerEdit;
 
-  var dirtyBalances = getDirtyBalances(state);
+  var dirtyBalances = _getDirtyBalances(state);
   if (dirtyBalances.length > 0) {
     body["balances"] = dirtyBalances.map((balance) => balance.toJson()).toList();
   }
-  var dirtyMeals = getDirtyMeals(state);
+  var dirtyMeals = _getDirtyMeals(state);
   if (dirtyMeals.length > 0) {
     body["meals"] = dirtyMeals.map((meal) => meal.toJson()).toList();
   }
@@ -45,15 +49,23 @@ Future<SyncResponse> _requestSync(AppState state, String sessionToken) async {
   return syncResponse;
 }
 
-List<Balance> getDirtyBalances(AppState state) {
+List<Balance> _getDirtyBalances(AppState state) {
   return state.balance.balances.where((balance) => balance.dirty == 1).toList();
 }
 
-List<Meal> getDirtyMeals(AppState state) {
+List<Meal> _getDirtyMeals(AppState state) {
   return state.meal.meals.where((meal) => meal.dirty == 1).toList();
 }
 
-void syncMiddleware(Store<AppState> store, action, NextDispatcher next) {
+Future<File> _downloadReport(int id, String sessionToken) async {
+  File file = await DefaultCacheManager().getSingleFile(getReportDownloadEndpoint(id), headers: {
+    "Authorization": "Bearer $sessionToken",
+  });
+  return file;
+}
+
+
+void networkMiddleware(Store<AppState> store, action, NextDispatcher next) {
   if (action is RequestSync) {
     if (!store.state.sync.isSyncing) {
       _requestSync(store.state, store.state.auth.sessionToken).then((syncResponse) {
@@ -72,6 +84,16 @@ void syncMiddleware(Store<AppState> store, action, NextDispatcher next) {
       // All the intermediate modules are completed, trigger the success action
       store.dispatch(SyncSuccess());
     }
+  } else if (action is OpenReportRequest) {
+    _downloadReport(action.id, store.state.auth.sessionToken).then((file) {
+      store.dispatch(OpenReportDownloaded(id: action.id));
+
+      // Open the file in the pdf viewer
+      OpenFile.open(file.path);
+    }).catchError((err) {
+      print("download report error: $err");
+      store.dispatch(OpenReportError(id: action.id, error: "Impossible scaricare il referto, riprovare più tardi"));
+    });
   }
 
   next(action);

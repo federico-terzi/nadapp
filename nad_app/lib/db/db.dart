@@ -7,7 +7,7 @@ const MIGRATIONS = [
   CREATE TABLE "diary" (
     "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "uuid"	TEXT NOT NULL UNIQUE,
-    "date"	INTEGER NOT NULL,
+    "date"	TEXT NOT NULL,
     "meal"	TEXT NOT NULL,
     "dirty"	INTEGER NOT NULL DEFAULT 0
   );
@@ -16,7 +16,7 @@ const MIGRATIONS = [
   CREATE TABLE "balances" (
     "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "uuid"	TEXT NOT NULL UNIQUE,
-    "date"	INTEGER NOT NULL,
+    "date"	TEXT NOT NULL,
     "minPressure"	INTEGER,
     "maxPressure"	INTEGER,
     "heartFrequency"	INTEGER,

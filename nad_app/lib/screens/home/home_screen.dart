@@ -15,7 +15,7 @@ import 'package:nad_app/theme/style.dart';
 
 class HomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey =
-      GlobalKey<ScaffoldState>(debugLabel: "Test");
+      GlobalKey<ScaffoldState>(debugLabel: "HomeScreen");
 
   List<Widget> generateCards(BuildContext context) {
     var cards = [
@@ -30,9 +30,7 @@ class HomeScreen extends StatelessWidget {
       HomeCard(
           image: "assets/referti.png",
           label: "I miei referti",
-          onPressed: () => {
-                // TODO
-              }),
+          onPressed: () => {Navigator.of(context).pushNamed(REPORTS_ROUTE)}),
       HomeCard(
           image: "assets/informati.png",
           label: "Informati",

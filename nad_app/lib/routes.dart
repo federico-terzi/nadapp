@@ -12,6 +12,7 @@ import 'package:nad_app/screens/intro/intro_screen.dart';
 import 'package:nad_app/screens/login/login_screen.dart';
 import 'package:nad_app/screens/my_doctors/my_doctors_screen.dart';
 import 'package:nad_app/screens/patient_check/patient_check_screen.dart';
+import 'package:nad_app/screens/reports/reports_screen.dart';
 import 'package:nad_app/screens/useful_information/iicb_screen.dart';
 import 'package:nad_app/screens/useful_information/iicb_therapy_screen.dart';
 import 'package:nad_app/screens/useful_information/useful_information_screen.dart';
@@ -30,6 +31,7 @@ const ADD_MEAL_TIPS_ROUTE = "/addMealTips";
 const BALANCE_ROUTE = "/balance";
 const ADD_BALANCE_ROUTE = "/addBalance";
 const ADD_BALANCE_TIPS_ROUTE = "/addBalanceTips";
+const REPORTS_ROUTE = "/reports";
 const CONTACT_ROUTE = "/contact";
 const MY_DOCTORS_ROUTE = "/myDoctors";
 const USEFUL_INFORMATION_ROUTE = "/usefulInfo";
@@ -77,6 +79,9 @@ PageTransition<dynamic> routeFactory(RouteSettings settings) {
       break;
     case MY_DOCTORS_ROUTE:
       return PageTransition(child: MyDoctorsScreen(), type: PageTransitionType.rightToLeft);
+      break;
+    case REPORTS_ROUTE:
+      return PageTransition(child: ReportsScreen(), type: PageTransitionType.rightToLeft);
       break;
     case USEFUL_INFORMATION_ROUTE:
       return PageTransition(child: UsefulInformationScreen(), type: PageTransitionType.rightToLeft);

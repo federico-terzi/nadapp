@@ -5,6 +5,7 @@ import 'package:nad_app/models/doctor_state.dart';
 import 'package:nad_app/models/meal_state.dart';
 import 'package:nad_app/models/navigation_state.dart';
 import 'package:nad_app/models/persistence_state.dart';
+import 'package:nad_app/models/report_state.dart';
 import 'package:nad_app/models/sync_state.dart';
 
 @immutable
@@ -14,6 +15,7 @@ class AppState {
   final MealState meal;
   final BalanceState balance;
   final DoctorState doctor;
+  final ReportState report;
   final PersistenceState persistence;
   final SyncState sync;
 
@@ -23,6 +25,7 @@ class AppState {
       MealState meal,
       BalanceState balance,
       DoctorState doctor,
+      ReportState report,
       PersistenceState persistence,
       SyncState sync})
       : auth = auth ?? new AuthState(),
@@ -30,6 +33,7 @@ class AppState {
         meal = meal ?? new MealState(),
         balance = balance ?? new BalanceState(),
         doctor = doctor ?? new DoctorState(),
+        report = report ?? new ReportState(),
         persistence = persistence ?? new PersistenceState(),
         sync = sync ?? new SyncState();
 
@@ -39,6 +43,7 @@ class AppState {
     MealState meal,
     BalanceState balance,
     DoctorState doctor,
+    ReportState report,
     PersistenceState persistence,
     SyncState sync,
   }) {
@@ -48,6 +53,7 @@ class AppState {
       meal: meal ?? this.meal,
       balance: balance ?? this.balance,
       doctor: doctor ?? this.doctor,
+      report: report ?? this.report,
       persistence: persistence ?? this.persistence,
       sync: sync ?? this.sync,
     );
