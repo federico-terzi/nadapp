@@ -80,7 +80,7 @@ class ReportsScreen extends StatelessWidget {
         converter: (store) => store.state.report,
         builder: (context, reportState) {
           return AppScaffold(
-            key: scaffoldKey,
+            globalKey: scaffoldKey,
             title: "Referti",
             body: Column(
               children: [

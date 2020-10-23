@@ -6,15 +6,55 @@ import 'package:nad_app/models/auth_state.dart';
 import 'package:nad_app/presentation/big_button.dart';
 import 'package:nad_app/presentation/fading_scaffold.dart';
 import 'package:nad_app/screens/login/login_phase_one_form.dart';
+import 'package:quiver/core.dart';
 
+import '../../routes.dart';
 import 'login_phase_two_form.dart';
 
-class LoginScreen extends StatelessWidget {
-  Widget _getLoginForm(AuthState authState) {
-    if (!authState.isPhaseOneCompleted) {
-      return LoginPhaseOneForm(authState: authState);
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isIICBLoginStarted = false;
+
+  Widget _getStrategySelectionPanel(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 20,),
+        Text("Seleziona il metodo d'accesso:", style: Theme.of(context).textTheme.bodyText2,),
+        SizedBox(height: 30,),
+        BigButton(
+            text: "Accedi con Credenziali IICB",
+            fontSize: 20,
+            primary: true,
+            onPressed: () {
+              this.setState(() {
+                isIICBLoginStarted = true;
+              });
+            }),
+        SizedBox(height: 20,),
+        BigButton(
+            text: "Accedi con SPID",
+            fontSize: 20,
+            primary: false,
+            onPressed: () {
+              Navigator.pushNamed(context, SPID_WEBVIEW_ROUTE);
+            }),
+      ],
+    );
+  }
+
+  Widget _getContent(AuthState authState) {
+    if (!isIICBLoginStarted) {
+      return _getStrategySelectionPanel(context);
     } else {
-      return LoginPhaseTwoForm(authState: authState);
+      if (!authState.isPhaseOneCompleted) {
+        return LoginPhaseOneForm(authState: authState);
+      } else {
+        return LoginPhaseTwoForm(authState: authState);
+      }
     }
   }
 
@@ -80,11 +120,14 @@ class LoginScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Image.asset("assets/logo.png", height: 100),
                   ),
-                  Text("Accedi", style: Theme.of(context).textTheme.headline1),
+                  Text("Accedi", style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline1),
                 ],
               ),
             ),
-            Flexible(flex: 4, child: Center(child: _getLoginForm(authState))),
+            Flexible(flex: 4, child: Center(child: _getContent(authState))),
             _getHelpButton(authState),
           ],
         );

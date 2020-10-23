@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:nad_app/theme/style.dart';
 
 class AppScaffold extends StatelessWidget {
-  final Key key;
+  final Key globalKey;
   final Widget body;
   final bool hasBack;
   final String title;
   final Widget fab;
   final Widget action;
 
-  AppScaffold({this.key, this.hasBack = true, this.title, this.fab, this.body, this.action});
+  AppScaffold({this.globalKey, this.hasBack = true, this.title, this.fab, this.body, this.action});
 
   List<Widget> _getActions() {
     if (this.action != null) {
@@ -22,7 +22,7 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: this.key,
+      key: this.globalKey,
       backgroundColor: LIGHT_GRAY_COLOR,
       appBar: AppBar(
         toolbarHeight: 70,
