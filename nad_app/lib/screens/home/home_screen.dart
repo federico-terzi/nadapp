@@ -147,7 +147,7 @@ class HomeScreen extends StatelessWidget {
               ],
               drawer: homeDrawer(context,
                 onLogout: () {
-                  StoreProvider.of<AppState>(context).dispatch(LogoutRequest());
+                  StoreProvider.of<AppState>(context).dispatch(LogoutRequest(requestedByUser: true));
                 }
               ),
             ));

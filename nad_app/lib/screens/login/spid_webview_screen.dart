@@ -40,13 +40,12 @@ class SpidWebviewScreen extends StatelessWidget {
                 var match = matches.elementAt(0);
                 String token = match.group(1);
                 if (token != null) {
-                  String trimmedToken = token.trim();
+                  String trimmedToken = Uri.decodeComponent(token.trim());
                   StoreProvider.of<AppState>(context).dispatch(
-                      LoginPhaseTwoSuccess(token: trimmedToken));
-                  StoreProvider.of<AppState>(context).dispatch(PushNamed(route: HOME_ROUTE, reset: true));
-                  StoreProvider.of<AppState>(context).dispatch(RequestSync());
+                      ConvertTokenRequest(token: trimmedToken));
                 } else {
-                  // TODO: handle error
+                  StoreProvider.of<AppState>(context).dispatch(
+                      LoginPhaseOneFailed(message: "Impossible completare l'accesso con SPID"));
                 }
               }
             },

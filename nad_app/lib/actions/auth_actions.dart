@@ -58,7 +58,23 @@ class LoginPhaseTwoFailed {
   LoginPhaseTwoFailed({this.message, this.error});
 }
 
-class LogoutRequest {}
+
+class ConvertTokenRequest {
+  final String token;
+
+  ConvertTokenRequest({this.token});
+
+  @override
+  String toString() {
+    return 'ConvertTokenRequest{token: $token}';
+  }
+}
+
+class LogoutRequest {
+  final bool requestedByUser;
+
+  LogoutRequest({this.requestedByUser});
+}
 class LogoutSuccess {}
 
 class LogoutStatusUpdated {}

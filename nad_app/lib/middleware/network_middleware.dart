@@ -40,11 +40,16 @@ Future<SyncResponse> _requestSync(AppState state, String sessionToken) async {
       .post(SYNC_ENDPOINT,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer $sessionToken",
+        "Cookie": sessionToken,
       },
       body: jsonEncode(body))
       .timeout(const Duration(seconds: 5));
   print("server response ${res.body}");
+
+  if (res.statusCode == 401) { // Session is no longer valid, request a login
+    throw SessionExpiredException();
+  }
+
   SyncResponse syncResponse = SyncResponse.fromJson(jsonDecode(res.body));
   return syncResponse;
 }
@@ -59,7 +64,7 @@ List<Meal> _getDirtyMeals(AppState state) {
 
 Future<File> _downloadReport(int id, String sessionToken) async {
   File file = await DefaultCacheManager().getSingleFile(getReportDownloadEndpoint(id), headers: {
-    "Authorization": "Bearer $sessionToken",
+    "Cookie": sessionToken,
   });
   return file;
 }
@@ -76,6 +81,9 @@ void networkMiddleware(Store<AppState> store, action, NextDispatcher next) {
         }
       }).catchError((err) {
         print("requestSync error $err");
+        if (err is SessionExpiredException) {
+          store.dispatch(LogoutRequest(requestedByUser: false));
+        }
         store.dispatch(SyncError(error: "Impossible completare la sincronizzazione, riprova più tardi"));
       });
     }
@@ -97,4 +105,8 @@ void networkMiddleware(Store<AppState> store, action, NextDispatcher next) {
   }
 
   next(action);
+}
+
+class SessionExpiredException implements Exception {
+  SessionExpiredException();
 }

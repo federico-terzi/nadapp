@@ -65,10 +65,17 @@ Middleware<AppState> createSqlMiddleware(NadDatabase db) {
         // TODO
       });
     } else if (action is LogoutRequest) {
-      _deleteAllEntries(diaryRepository, balanceRepository).then((_) {
+      // Delete the DB entries only if the user explicitly requested a logout,
+      // and not if that was caused by an expired session.
+      if (action.requestedByUser) {
+        _deleteAllEntries(diaryRepository, balanceRepository).then((_) {
+          store.dispatch(LogoutDBCleared());
+          store.dispatch(LogoutStatusUpdated());
+        });
+      } else {
         store.dispatch(LogoutDBCleared());
         store.dispatch(LogoutStatusUpdated());
-      });
+      }
     } else if (action is SyncSuccess) {
       _cleanDirtyEntries(diaryRepository, balanceRepository);
     }

@@ -69,16 +69,12 @@ void loginMiddleware(Store<AppState> store, action, NextDispatcher next) {
       Map<String, dynamic> resBody = jsonDecode(res.body);
       print("status: ${res.statusCode}, body: $resBody");
       if (res.statusCode == 200) {
-        if (resBody.containsKey("token")) {
-          String sessionToken = resBody["token"];
-          store.dispatch(
-              LoginPhaseTwoSuccess(token: sessionToken));
-          store.dispatch(PushNamed(route: HOME_ROUTE, reset: true));
-          store.dispatch(RequestSync());
-        } else {
-          store.dispatch(
-              LoginPhaseTwoFailed(message: "Errore lato server"));
-        }
+        String cookieHeader = res.headers["set-cookie"];
+        String sessionToken = cookieHeader.split(";")[0];
+        store.dispatch(
+            LoginPhaseTwoSuccess(token: sessionToken));
+        store.dispatch(PushNamed(route: HOME_ROUTE, reset: true));
+        store.dispatch(RequestSync());
       } else {
         String error = resBody["error"];
         String errorMessage = "Errore sconosciuto";
@@ -86,6 +82,43 @@ void loginMiddleware(Store<AppState> store, action, NextDispatcher next) {
           errorMessage = "Il codice di verifica è scaduto";
         } else if (error == "invalid code") {
           errorMessage = "Codice non valido";
+        }
+        store.dispatch(
+            LoginPhaseTwoFailed(message: errorMessage));
+      }
+    }).catchError((error) {
+      print(error);
+      String message = "Errore sconosciuto";
+      if (error is SocketException) {
+        message = "Errore di connessione";
+      }
+      store.dispatch(
+          LoginPhaseTwoFailed(message: message, error: error));
+    });
+  } else if (action is ConvertTokenRequest) {
+    http
+        .post(SPID_CONVERT_TOKEN_ENDPOINT,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "token": action.token,
+        }))
+        .then((res) {
+      Map<String, dynamic> resBody = jsonDecode(res.body);
+      print("status: ${res.statusCode}, body: $resBody");
+      if (res.statusCode == 200) {
+        String cookieHeader = res.headers["set-cookie"];
+        String sessionToken = cookieHeader.split(";")[0];
+        store.dispatch(
+            LoginPhaseTwoSuccess(token: sessionToken));
+        store.dispatch(PushNamed(route: HOME_ROUTE, reset: true));
+        store.dispatch(RequestSync());
+      } else {
+        String error = resBody["error"];
+        String errorMessage = "Errore sconosciuto";
+        if (error == "invalid token") {
+          errorMessage = "Il codice di verifica è scaduto";
         }
         store.dispatch(
             LoginPhaseTwoFailed(message: errorMessage));
